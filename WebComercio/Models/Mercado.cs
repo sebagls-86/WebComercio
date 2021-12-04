@@ -52,7 +52,7 @@ namespace WebComercio
                 if (cat != null)
                 {
                     Producto prod = new Producto { Nombre = nombre, Precio = precio, Cantidad = Cantidad, Cat = cat };
-                   
+
                     db.productos.Add(prod);
                     db.SaveChanges();
                     return true;

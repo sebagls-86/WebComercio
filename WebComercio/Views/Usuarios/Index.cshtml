@@ -9,6 +9,16 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-controller="Usuarios" asp-action="Index" method="get">
+    <p>
+        Nombre: <input type="text" name="searchString"/>
+               <input type="submit" value="Filtrar" />
+    </p>
+
+</form>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -28,7 +38,7 @@
                 @Html.DisplayNameFor(model => model.Password)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MiCarro)
+                @Html.DisplayNameFor(model => model.Carro.CarroId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TipoUsuario)

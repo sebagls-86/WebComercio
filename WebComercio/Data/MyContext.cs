@@ -20,7 +20,7 @@ namespace WebComercio.Data
 
         public DbSet<WebComercio.Compra> compras { get; set; }
 
-        public DbSet<Carro> carro { get; set; }
+        public DbSet<WebComercio.Carro> carro { get; set; }
 
         public DbSet<WebComercio.Categoria> categorias { get; set; }
 

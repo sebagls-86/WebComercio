@@ -9,7 +9,7 @@ using WebComercio.Data;
 namespace WebComercio.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20211203140709_initial")]
+    [Migration("20211203231250_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace WebComercio.Migrations
                     b.HasIndex("UsuarioId")
                         .IsUnique();
 
-                    b.ToTable("carro");
+                    b.ToTable("Carro");
                 });
 
             modelBuilder.Entity("WebComercio.Carro_productos", b =>
@@ -47,9 +47,6 @@ namespace WebComercio.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Carro_productos_Id")
                         .HasColumnType("int");
 
                     b.HasKey("Id_Producto", "Id_Carro");
