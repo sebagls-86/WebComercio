@@ -30,21 +30,21 @@
         {
             <tr>
                 <td>
-                    item.Nombre
+                    @item.Nombre
                 </td>
                 <td>
-                    item.Precio
+                    @item.Precio
                 </td>
                 <td>
-                     item.Cantidad
+                     @item.Cantidad
                 </td>
                 <td>
-                    item.Cat.CatId
+                    @item.CatId
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductoId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductoId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductoId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ProductoId">Agregar</a> |
+                    <a asp-action="Details" asp-route-id="@item.ProductoId">Quitar</a> |
+                    
                 </td>
             </tr>
         }
