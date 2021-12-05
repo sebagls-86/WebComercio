@@ -15,8 +15,12 @@ namespace WebComercio.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(string mensaje, int identificador)
         {
+            ViewBag.Mensaje = mensaje;
+
+            ViewBag.Identificador = identificador;
+
             return View();
         }
         public async Task<IActionResult> Registrado([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
@@ -24,23 +28,43 @@ namespace WebComercio.Controllers
             if (ModelState.IsValid)
             {
 
-                Carro carro = new Carro();
-                usuario.TipoUsuario = 1;
-                _context.Add(usuario);
-                _context.Add(carro);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    Usuario usu = _context.usuarios.Where(u => u.Cuil == usuario.Cuil).FirstOrDefault();
 
-                Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
-                usuario.MiCarro = lastCarro.CarroId;
-                Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
-                carro.UsuarioId = lasUsuario.UsuarioId;
-                _context.usuarios.Update(usuario);
-                _context.carro.Update(carro);
-                await _context.SaveChangesAsync();
+                    if (usu != null)
+                    {
+                        return RedirectToAction("Index", "Registrar", new { mensaje = "CUIL ya registrado", identificador = 1 });
+                    }
+                    else
+                    {
 
-                return RedirectToAction(nameof(Index));
+                        Carro carro = new Carro();
+
+                        _context.Add(usuario);
+                        _context.Add(carro);
+                        await _context.SaveChangesAsync();
+
+                        Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
+                        usuario.MiCarro = lastCarro.CarroId;
+                        Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
+                        carro.UsuarioId = lasUsuario.UsuarioId;
+                        _context.usuarios.Update(usuario);
+                        _context.carro.Update(carro);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Login", new { mensaje = "¡Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
+                    }
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Index", "Registrar", new { mensaje = "Error", identificador = 1 });
+                }
+
             }
             return View(usuario);
         }
     }
 }
+
+
