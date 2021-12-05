@@ -43,13 +43,13 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario NO administrador", identificador = 4 });
+                        return RedirectToAction("Index", "Mercado");
                     }
 
                 }
                 catch (Exception)
                 {
-                    return RedirectToAction("Index", "Registrar", new { mensaje = "Error", identificador = 1 });
+                    return RedirectToAction("Index", "Login", new { mensaje = "Error", identificador = 1 });
                 }
 
             }
