@@ -1,0 +1,52 @@
+﻿
+
+@{
+    ViewData["Title"] = "Mercado";
+    Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
+}
+
+
+<h1>Mercado del orto</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+               Precio
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Cat
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @ViewBag.Productos)
+        {
+            <tr>
+                <td>
+                    @item.Nombre
+                </td>
+                <td>
+                    @item.Precio
+                </td>
+                <td>
+                     @item.Cantidad
+                </td>
+                <td>
+                    @item.CatId
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductoId">Agregar</a> |
+                    <a asp-action="Details" asp-route-id="@item.ProductoId">Quitar</a> |
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
