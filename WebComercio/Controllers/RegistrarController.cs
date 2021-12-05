@@ -53,7 +53,7 @@ namespace WebComercio.Controllers
                         _context.carro.Update(carro);
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "Login", new { mensaje = "¡Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
+                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
                     }
                 }
                 catch (Exception)

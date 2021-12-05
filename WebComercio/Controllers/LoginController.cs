@@ -24,38 +24,28 @@ namespace WebComercio.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Registrado([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
+        public IActionResult Login([Bind("UsuarioId, Password")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
 
                 try
                 {
-                    Usuario usu = _context.usuarios.Where(u => u.Cuil == usuario.Cuil).FirstOrDefault();
+                    Usuario loginUsuario = _context.usuarios.Where(u => u.UsuarioId == usuario.UsuarioId && u.Password == usuario.Password).FirstOrDefault();
 
-                    if (usu != null)
+                    if (usuario == null)
                     {
-                        return RedirectToAction("Index", "Registrar", new { mensaje = "CUIL ya registrado", identificador = 1 });
+                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario o contraseña incorrectos", identificador = 3 });
+                    }
+                    else if (loginUsuario.TipoUsuario == 1)
+                    {
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-
-                        Carro carro = new Carro();
-
-                        _context.Add(usuario);
-                        _context.Add(carro);
-                        await _context.SaveChangesAsync();
-
-                        Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
-                        usuario.MiCarro = lastCarro.CarroId;
-                        Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
-                        carro.UsuarioId = lasUsuario.UsuarioId;
-                        _context.usuarios.Update(usuario);
-                        _context.carro.Update(carro);
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Login", new { mensaje = "¡Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
+                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario NO administrador", identificador = 4 });
                     }
+
                 }
                 catch (Exception)
                 {
@@ -67,3 +57,5 @@ namespace WebComercio.Controllers
         }
     }
 }
+
+

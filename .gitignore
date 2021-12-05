@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+#AppSetings y MyContext
+WebComercio/appsettings.json
+Data/MyContext.cs

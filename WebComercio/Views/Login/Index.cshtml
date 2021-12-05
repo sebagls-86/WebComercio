@@ -1,4 +1,5 @@
-﻿
+﻿@model WebComercio.Usuario
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
@@ -10,18 +11,22 @@
     <div class="text-success">
         @ViewBag.Mensaje
     </div>
-    <form>
-        <div class="mb-3">
-            <label for="dni" class="form-label">DNI</label>
-            <input type="number" class="form-control" id="dni" aria-describedby="dni">
-            <div id="dni" class="form-text">Nunca compartiremos tu información.</div>
+    <form asp-action="Login">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="UsuarioId" class="control-label">CUIL</label>
+            <input asp-for="UsuarioId" class="form-control" />
+            <span asp-validation-for="UsuarioId" class="text-danger"></span>
         </div>
-        <div class="mb-3">
-            <label for="pass" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="pass">
+        <div class="form-group">
+            <label asp-for="Password" value="Cuil" class="control-label">Contraseña</label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" value="Contraseña "class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group">
+            <input type="submit" value="Login" class="btn btn-primary" />
+        </div>
     </form>
 
 
