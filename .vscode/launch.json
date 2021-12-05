@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "vslsRemoteLaunch",
+            "name": "WebComercio",
+            "request": "attach",
+            "projectID": "788e6f72-5705-47be-a074-17ee77bb7e73"
+        }
+    ]
+}

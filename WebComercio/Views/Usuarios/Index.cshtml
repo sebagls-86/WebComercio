@@ -4,78 +4,130 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container">
+    <h1>Usuarios</h1>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="container my-3">
 
-<form asp-controller="Usuarios" asp-action="Index" method="get">
-    <p>
-        Nombre: <input type="text" name="searchString"/>
-               <input type="submit" value="Filtrar" />
-    </p>
+    <div class="row">
 
-</form>
+        <div class="col -md-4">
+
+            <div class="card my-2" style="width: 15rem;">
+                <img src="~/IMG/usuarios/user.jpeg" class="card-img-top" alt="usuarios">
+                
+            </div>
+            
+        </div>
+    </div>
+       
+          <div class="col-md-12 my-5">
+
+            <div class="row text-left">
+
+                <div class="col-md-3">
+                    <h5><b>Agegar Usuario</b></h5>
+                </div>
+
+                <div class="col-md-7 pl-5">
+                  <a asp-action="Create" class="text-right"><img src="~/IMG/usuarios/agregarUsuario.png"></a>
+                </div>
+       
+        <div class="col-md-12 my-5">
+
+            <div class="row text-left">
+
+                <div class="col-md-3">
+                    <h5><b>Buscar por nombre</b></h5>
+                </div>
+
+                <div class="col-md-7 pl-5">
+                    <form asp-controller="Usuarios" asp-action="Index" method="get">
+                        <input type="text" class="form-control" name="searchString" />
+                        
+                    </form>
+                </div>
+
+                <div class="col-md-2 text-right">
+                    <form asp-controller="Usuarios" asp-action="Index" method="get">                       
+                        <input class="btn btn-outline-primary" type="submit" value="Filtrar" />
+                    </form>
+                </div>
+
+            </div>
+
+        </div>  
+
+    </div>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Cuil)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Apellido)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Carro.CarroId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoUsuario)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cuil)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MiCarro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoUsuario)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UsuarioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UsuarioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UsuarioId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col -md-12">
+            <table class="table  my-2 text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Cuil)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Apellido)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Mail)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Password)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Carro.CarroId)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.TipoUsuario)
+                        </th>
+                        <th scope="col">
+                            Accion
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cuil)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Apellido)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Password)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MiCarro)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoUsuario)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.UsuarioId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
+                                <a asp-action="Details" asp-route-id="@item.UsuarioId"><img src="~/IMG/usuarios/detalles.png" data-bs-toggle="tooltip" title="Detalles"></a>
+                                <a asp-action="Delete" asp-route-id="@item.UsuarioId"><img src="~/IMG/usuarios/eliminar.png" data-bs-toggle="tooltip" title="Eliminar"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
