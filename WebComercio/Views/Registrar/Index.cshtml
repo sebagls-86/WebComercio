@@ -1,16 +1,20 @@
 ﻿@model WebComercio.Usuario
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registro";
+    Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Registro</h1>
 
 <h4>Usuario</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <div class="text-danger">
+            @ViewBag.Mensaje
+        </div>
+        <form asp-action="Registrado">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Cuil" class="control-label"></label>
@@ -38,15 +42,21 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-
+                <select id=" " TipoUsuario" name="TipoUsuario" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                    <option selected>Selecciona una opción</option>
+                    <option value="2">Persona</option>
+                    <option value="3">Empresa</option>
+                </select>
             </div>
-        </div>
+
+            <div class="form-group">
+                <input type="submit" value="Registrado" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
 
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

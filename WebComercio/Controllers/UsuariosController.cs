@@ -26,6 +26,7 @@ namespace WebComercio.Controllers
                            select u;
 
 
+
             if(!String.IsNullOrEmpty(searchString))
             {
                 usuarios = usuarios.Where(u => u.Nombre.Contains(searchString));
@@ -63,11 +64,13 @@ namespace WebComercio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Create([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                
+
+
                 Carro carro = new Carro();
                 _context.Add(usuario);
                 _context.Add(carro);
@@ -80,6 +83,7 @@ namespace WebComercio.Controllers
                 _context.usuarios.Update(usuario);
                 _context.carro.Update(carro);
                 await _context.SaveChangesAsync();
+
 
                 return RedirectToAction(nameof(Index));
             }
