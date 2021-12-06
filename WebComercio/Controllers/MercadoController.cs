@@ -17,7 +17,7 @@ namespace WebComercio.Controllers
             _context = context;
         }
 
-        public async Task <IActionResult> Index(string mensaje, int identificador, string searchString, string Cat, string OrderByNombre, string sortOrder)
+        public async Task <IActionResult> Index(string mensaje, int identificador, string searchString, string Cat, string OrderByNombre, string OrderByPrecio, string sortOrder)
         {
             List<Producto> productosOrdenados = new List<Producto>();
             productosOrdenados = _context.productos.OrderBy(producto => producto.ProductoId).ToList();
@@ -55,10 +55,8 @@ namespace WebComercio.Controllers
 
 
 
-
-
-            //var productos = from p in _context.productos.Include(p => p.Cat)
-            //               select p;
+            var productos = from p in _context.productos.Include(p => p.Cat)
+                            select p;
 
 
             if (!String.IsNullOrEmpty(searchString))

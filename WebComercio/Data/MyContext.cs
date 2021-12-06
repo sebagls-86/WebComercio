@@ -20,7 +20,7 @@ namespace WebComercio.Data
 
         public DbSet<WebComercio.Compra> compras { get; set; }
 
-        public DbSet<WebComercio.Carro> carro { get; set; }
+        public DbSet<Carro> carro { get; set; }
 
         public DbSet<WebComercio.Categoria> categorias { get; set; }
 
@@ -30,7 +30,7 @@ namespace WebComercio.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-L0586C2;Initial Catalog=comercio;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=SEBA\SQLEXPRESS02;Initial Catalog=comercio;Integrated Security=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
