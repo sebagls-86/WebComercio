@@ -4,50 +4,84 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container">
+    <h1>Productos</h1>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cat)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cantidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cat.CatId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductoId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container my-3">
+
+    <div class="row">
+
+        <div class="col -md-4">
+
+            <div class="card my-2" style="width: 15rem;">
+                <img src="~/IMG/productos/productos.jpg" class="card-img-top" alt="productos">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 my-5">
+    <div class="row text-left">
+
+        <div class="col-md-3">
+            <h5><b>Agegar</b>  <a asp-action="Create" class="text-right"><img src="~/IMG/productos/agregarProducto.png"></a> </h5>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col -md-12">
+            <table class="table  my-2 text-center">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Precio)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cantidad)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cat)
+                        </th>
+                        <th scope="col">
+                            Accion
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Precio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cantidad)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cat.CatId)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ProductoId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
+                                <a asp-action="Details" asp-route-id="@item.ProductoId"><img src="~/IMG/usuarios/detalles.png" data-bs-toggle="tooltip" title="Detalles"></a>
+                                <a asp-action="Delete" asp-route-id="@item.ProductoId"><img src="~/IMG/usuarios/eliminar.png" data-bs-toggle="tooltip" title="Eliminar"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

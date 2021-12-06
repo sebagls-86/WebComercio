@@ -4,7 +4,7 @@ namespace WebComercio
 {
     public class Carro_productos
     {
-        public int Carro_productos_Id { get; set; }
+        //public int Carro_productos_Id { get; set; }
         public Carro Carro { get; set; }
         public int Id_Carro { get; set; }
         public Producto Producto { get; set; }
