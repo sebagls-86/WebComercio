@@ -61,7 +61,7 @@ namespace WebComercio.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "carro",
+                name: "Carro",
                 columns: table => new
                 {
                     CarroId = table.Column<int>(type: "int", nullable: false)
@@ -70,9 +70,9 @@ namespace WebComercio.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_carro", x => x.CarroId);
+                    table.PrimaryKey("PK_Carro", x => x.CarroId);
                     table.ForeignKey(
-                        name: "FK_carro_usuarios_UsuarioId",
+                        name: "FK_Carro_usuarios_UsuarioId",
                         column: x => x.UsuarioId,
                         principalTable: "usuarios",
                         principalColumn: "UsuarioId",
@@ -105,16 +105,15 @@ namespace WebComercio.Migrations
                 {
                     Id_Carro = table.Column<int>(type: "int", nullable: false),
                     Id_Producto = table.Column<int>(type: "int", nullable: false),
-                    Carro_productos_Id = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Carro_productos", x => new { x.Id_Producto, x.Id_Carro });
                     table.ForeignKey(
-                        name: "FK_Carro_productos_carro_Id_Carro",
+                        name: "FK_Carro_productos_Carro_Id_Carro",
                         column: x => x.Id_Carro,
-                        principalTable: "carro",
+                        principalTable: "Carro",
                         principalColumn: "CarroId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -151,8 +150,8 @@ namespace WebComercio.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_carro_UsuarioId",
-                table: "carro",
+                name: "IX_Carro_UsuarioId",
+                table: "Carro",
                 column: "UsuarioId",
                 unique: true);
 
@@ -186,7 +185,7 @@ namespace WebComercio.Migrations
                 name: "productos_compra");
 
             migrationBuilder.DropTable(
-                name: "carro");
+                name: "Carro");
 
             migrationBuilder.DropTable(
                 name: "compras");

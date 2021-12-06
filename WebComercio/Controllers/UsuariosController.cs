@@ -20,9 +20,18 @@ namespace WebComercio.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.usuarios.ToListAsync());
+            var usuarios = from u in _context.usuarios.Include(u => u.Carro)
+                           select u;
+
+
+            if(!String.IsNullOrEmpty(searchString))
+            {
+                usuarios = usuarios.Where(u => u.Nombre.Contains(searchString));
+            }
+
+            return View(await usuarios.ToListAsync());
         }
 
         // GET: Usuarios/Details/5
@@ -54,12 +63,24 @@ namespace WebComercio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,MiCarro,TipoUsuario")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
+                
+                Carro carro = new Carro();
                 _context.Add(usuario);
+                _context.Add(carro);
                 await _context.SaveChangesAsync();
+
+                Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
+                usuario.MiCarro = lastCarro.CarroId;
+                Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
+                carro.UsuarioId = lasUsuario.UsuarioId;
+                _context.usuarios.Update(usuario);
+                _context.carro.Update(carro);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(usuario);
