@@ -17,7 +17,7 @@ namespace WebComercio.Controllers
             _context = context;
         }
 
-        public async Task <IActionResult> Index(string mensaje, int identificador, string searchString, string Cat, string OrderByNombre, string OrderByPrecio, string sortOrder)
+        public async Task<IActionResult> Index(string mensaje, int identificador, string searchString, string Cat, string OrderByNombre, string OrderByPrecio, string sortOrder)
         {
             List<Producto> productosOrdenados = new List<Producto>();
             productosOrdenados = _context.productos.OrderBy(producto => producto.ProductoId).ToList();
@@ -114,7 +114,7 @@ namespace WebComercio.Controllers
         public async Task<IActionResult> Carro()
         {
 
-            
+
 
             //var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).FirstOrDefaultAsync(m => m.Id_Carro == id);
             var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).Include(c => c.Carro).ToListAsync();
@@ -126,16 +126,29 @@ namespace WebComercio.Controllers
             ViewBag.Carroproductos = Carro_productos;
             return View(Carro_productos);
         }
-        public async Task<IActionResult> AgregarProducto([Bind("ProductoId")] Producto producto)
+
+
+        public  IActionResult AgregarProducto(int ProductoId, int Cantidad)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(producto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                int usuarioID = 4;
+                Usuario usuarioEncontrado =  _context.usuarios.Include(c => c.Carro).FirstOrDefault(u => u.UsuarioId == usuarioID);
+                Producto productoEncontrado =  _context.productos.FirstOrDefault(p => p.ProductoId == ProductoId);
+
+
+                Carro cart = usuarioEncontrado.Carro;
+                cart.ProductosCompra.Add(productoEncontrado);
+                _context.carro.Update(cart);
+                _context.SaveChanges();
+
+                cart.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
+                _context.carro.Update(cart);
+                _context.SaveChanges();
+
             }
-            ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "CatId", producto.CatId);
-            return View(producto);
+            return RedirectToAction("Index");
         }
     }
 }
