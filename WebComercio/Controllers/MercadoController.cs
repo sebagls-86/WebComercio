@@ -126,6 +126,16 @@ namespace WebComercio.Controllers
             ViewBag.Carroproductos = Carro_productos;
             return View(Carro_productos);
         }
-
+        public async Task<IActionResult> AgregarProducto([Bind("ProductoId")] Producto producto)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(producto);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "CatId", producto.CatId);
+            return View(producto);
+        }
     }
 }
