@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<WebComercio.Producto>*@
+﻿@model IEnumerable<WebComercio.Producto>
 
 
 @{
@@ -16,8 +16,35 @@
     <form asp-controller="Mercado" asp-action="Index" method="get">
         <p>
             Nombre del producto <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Filtrar" class="btn btn-primary" />
+            
         </p>
+
+        <fieldset>
+
+            <div>
+                <input type="radio" id="contactChoice1"
+                       name="orderByName" value="@ViewData["ByName"]">
+                <label for="contactChoice1">Nombre ascendente</label>
+
+                <input type="radio" id="contactChoice2"
+                       name="orderByNameDesc" value="@ViewData["ByName"]">
+                <label for="contactChoice2">Nombre descendente</label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div>
+                <input type="radio" id="contactChoice1"
+                       name="orderByPrice" value="@ViewData["ByPrice"]">
+                <label for="contactChoice1">Precio ascendente</label>
+
+                <input type="radio" id="contactChoice2"
+                       name="orderByPriceDesc" value="@ViewData["ByPrice"]">
+                <label for="contactChoice2">Precio descendente</label>
+            </div>
+        </fieldset>
+        <div>
+            <input type="submit" value="Filtrar" class="btn btn-primary" />
+        </div>
 
     </form>
 
@@ -40,34 +67,24 @@
 
     </form>
 </div>
-<div class="d-flex flex-row">
+
+
+@*<div class="d-flex flex-row">
     <form asp-controller="Mercado" asp-action="Index" method="get">
         <p>
-            <select name="OrderByNombre">
-                <option selected>Ordenar por nombre</option>
-                <option value="1">A-Z</option>
-                <option value="2">Z-A</option>
-            </select>
-            <div class="form-group">
-                <input type="submit" value="Ordenar" class="btn btn-primary" />
-            </div>
+            <label><input type="checkbox" id="cbox1" name="orderByName" value="@ViewData["ByName"]"> Ordenar por nombre</label><br>
+            <input type="checkbox" id="cbox2" name="orderByPrice" value="@ViewData["ByPrice"]"> <label for="cbox2">Ordenar por precio</label><br>
+            <input type="submit" value="Ordenar" class="btn btn-primary" />
         </p>
 
     </form>
 
-    <form asp-controller="Mercado" asp-action="Index" method="get">
-        <p>
+   
+</div>*@
 
-            <select name="OrderByPrecio">
-                <option selected>Ordenar por precio</option>
-                <option value="1">Ascendente</option>
-                <option value="2">Descendente</option>
-            </select>
-            <div class="form-group">
-                <input type="submit" value="Ordenar" class="btn btn-primary" />
-            </div>
-        </p>
-
+<div>
+    <form>
+       
     </form>
 </div>
 
@@ -79,24 +96,23 @@
     <thead>
         <tr>
             <th>
-              @*<a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(item => item.Nombre)</a>*@
-                Nombre
+                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
             <th>
-                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.Precio)</a>*@
-                Precio
+                @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm })
             </th>
             <th>
-                Cantidad
+                @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm })
             </th>
             <th>
-                Cat
+                @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm })
             </th>
             <th></th>
         </tr>
+
     </thead>
     <tbody>
-        @foreach (var item in @ViewBag.Productos)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
@@ -109,7 +125,7 @@
                     @item.Cantidad
                 </td>
                 <td>
-                    @item.CatId
+                    @item.Cat.Nombre
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ProductoId">Agregar</a> |

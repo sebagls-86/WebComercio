@@ -17,7 +17,7 @@ namespace WebComercio.Controllers
             _context = context;
         }
 
-        public async Task <IActionResult> Index(string mensaje, int identificador, string searchString, string Cat, string OrderByNombre, string OrderByPrecio, string sortOrder)
+        public async Task <IActionResult> Index(string mensaje, int identificador, string searchString, string orderByName, string orderByPrice, string orderByNameDesc, string orderByPriceDesc, string Cat, string sortOrder)
         {
             List<Producto> productosOrdenados = new List<Producto>();
             productosOrdenados = _context.productos.OrderBy(producto => producto.ProductoId).ToList();
@@ -26,33 +26,18 @@ namespace WebComercio.Controllers
 
             ViewBag.Productos = productosOrdenados;
             ViewBag.categorias = categorias;
-
             ViewBag.Mensaje = mensaje;
 
-            //ViewBag.Identificador = identificador;
-            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            //ViewData["CurrentFilter"] = searchString;
-
-            ////var productos = from p in _context.productos.Include(p => p.Cat)
-            ////                select p;
-
-            //switch (sortOrder)
-            //{
-            //    case "name_desc":
-            //        productos = productos.OrderByDescending(p => p.Nombre);
-            //        break;
-            //    case "Date":
-            //        productos = productos.OrderBy(p => p.Precio);
-            //        break;
-            //    case "date_desc":
-            //        productos = productos.OrderByDescending(p => p.Precio);
-            //        break;
-            //    default:
-            //        productos = productos.OrderBy(p => p.Nombre);
-            //        break;
-            //}
-
+            ViewBag.Identificador = identificador;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["AmountSortParm"] = sortOrder == "Amount" ? "amount_desc" : "Amount";
+            ViewData["CategorySortParm"] = sortOrder == "Category" ? "category_desc" : "Category";
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["ByName"] = orderByName;
+            ViewData["ByPrice"] = orderByPrice;
+            ViewData["ByNameDesc"] = orderByNameDesc;
+            ViewData["ByPriceDesc"] = orderByPriceDesc;
 
 
             var productos = from p in _context.productos.Include(p => p.Cat)
@@ -62,31 +47,87 @@ namespace WebComercio.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 productos = productos.Where(u => u.Nombre.Contains(searchString));
-                ViewBag.Productos = productos;
-            }
-            else if (!String.IsNullOrEmpty(Cat))
-            {
-                productos = productos.Where(u => u.Cat.Nombre.Contains(Cat));
+
+                if (orderByName == "on" && orderByPrice == "on")
+                {
+                    productos = productos.OrderBy(p => p.Nombre).ThenBy(p => p.Precio);
+                }
+
+                else if (orderByNameDesc == "on" && orderByPriceDesc == "on")
+                {
+                    productos = productos.OrderByDescending(p => p.Nombre).ThenByDescending(p => p.Precio);
+                }
+                else if (orderByNameDesc == "on" && orderByPrice == "on")
+                {
+                    productos = productos.OrderByDescending(p => p.Nombre).ThenBy(p => p.Precio);
+                }
+
+                else if (orderByName == "on" && orderByPriceDesc == "on")
+                {
+                    productos = productos.OrderBy(p => p.Nombre).ThenByDescending(p => p.Precio);
+                }
+
+                else if (orderByPrice == "on")
+                {
+                    productos = productos.OrderBy(p => p.Precio);
+                }
+                else if (orderByName == "on")
+                {
+                    productos = productos.OrderBy(p => p.Nombre);
+                }
+
+                else if (orderByPriceDesc == "on")
+                {
+                    productos = productos.OrderByDescending(p => p.Precio);
+                }
+                else if (orderByNameDesc == "on")
+                {
+                    productos = productos.OrderByDescending(p => p.Nombre);
+                }
+
                 ViewBag.Productos = productos;
 
             }
-            else if (OrderByNombre == "1")
+
+
+
+            switch (sortOrder)
             {
-                productos = productos.OrderBy(u => u.Nombre);
-                ViewBag.Productos = productos;
+                case "name_desc":
+                    productos = productos.OrderByDescending(p => p.Nombre).ThenByDescending(p => p.Precio);
+                    ViewBag.Productos = productos;
+                    break;
+                case "Price":
+                    productos = productos.OrderBy(p => p.Precio);
+                    ViewBag.Productos = productos;
+                    break;
+                case "price_desc":
+                    ViewBag.Productos = productos.OrderByDescending(p => p.Precio).ThenBy(p => p.Nombre);
+                    Console.WriteLine(productos);
+                    break;
+                case "Amount":
+                    productos = productos.OrderBy(p => p.Cantidad);
+                    ViewBag.Productos = productos;
+                    break;
+                case "amount_desc":
+                    productos = productos.OrderByDescending(p => p.Cantidad);
+                    ViewBag.Productos = productos;
+                    break;
+                case "Category":
+                    productos = productos.OrderBy(p => p.Cat.Nombre);
+                    ViewBag.Productos = productos;
+                    break;
+                case "category_desc":
+                    productos = productos.OrderByDescending(p => p.Cat.Nombre);
+                    ViewBag.Productos = productos;
+                    break;
+                
             }
-            else if (OrderByNombre == "2")
+
+
+            if (!String.IsNullOrEmpty(Cat))
             {
-                ViewBag.Productos = productos.OrderByDescending(u => u.Nombre); ;
-            }
-            else if (OrderByPrecio == "1")
-            {
-                productos = productos.OrderByDescending(u => u.Precio);
-                ViewBag.Productos = productos;
-            }
-            else if (OrderByPrecio == "2")
-            {
-                productos = productos.OrderBy(u => u.Precio);
+                productos = productos.Where(u => u.Cat.Nombre.Contains(Cat));
                 ViewBag.Productos = productos;
             }
 
