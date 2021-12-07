@@ -94,7 +94,38 @@ namespace WebComercio.Controllers
             return View(await productos.ToListAsync());
         }
 
+        //detalle producto
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var producto = await _context.productos.Include(p => p.Cat).FirstOrDefaultAsync(m => m.ProductoId == id);
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return View(producto);
+        }
+
+        public async Task<IActionResult> Carro()
+        {
+
+            
+
+            //var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).FirstOrDefaultAsync(m => m.Id_Carro == id);
+            var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).Include(c => c.Carro).ToListAsync();
+
+            if (Carro_productos == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Carroproductos = Carro_productos;
+            return View(Carro_productos);
+        }
 
     }
 }
