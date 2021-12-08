@@ -16,6 +16,8 @@ namespace WebComercio
         public Carro Carro { get; set; }
         public int MiCarro { get; set; }
         public int TipoUsuario { get; set; }
+        public int Intentos { get; set; }
+        public bool Bloqueado { get; set; }
         public List<Compra> Compra { get; set; }
 
 

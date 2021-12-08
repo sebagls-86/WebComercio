@@ -4,27 +4,40 @@
     ViewData["Title"] = "Login";
 }
 
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Cuil" class="control-label"></label>
-            <input asp-for="Cuil" class="form-control" />
-            <span asp-validation-for="Cuil" class="text-danger"></span>
+<div class="container my-5">
+        <div class="row">
+                <img src="~/IMG/homeAdmin/logoDaVinci.jpeg" alt="administracion">                
         </div>
-        <div class="form-group">
-            <label asp-for="Password" class="control-label"></label>
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+
+<div class="container my-5">
+    <div class="row">
+
+        <div class="col-md-12">
+            <h1><b>Mercado</b>  <img src="~/IMG/homeAdmin/administracion.png" width="50" height="50"> </h1>
         </div>
 
-        <div class="form-group">
-            <input type="submit" value="Login" class="btn btn-primary" />
-        </div>
-    </form>
+    </div>
+</div>
 
+<div class="container my-5">
+    <h3>Integrantes</h3>
+    <ul class="my-3">
+        <li>Calleja Horacio</li>
+        <li>Cohen Nicolas</li>
+        <li>Kim Anastasia</li>
+        <li>Kukuchka Marcos</li>
+        <li>López Emmanuel</li>
+        <li>López Sosa Sebastian</li>
+        <li>Motzo Franco</li>
+    </ul>
+</div>
+
+<div class="container my-5">
+    <h3>Repositorio</h3>
+    <ul class="my-3">
+        <li><a href="https://github.com/sebagls-86/WebComercio" target="_blank">GitHub</a></li>
+
+    </ul>
 </div>

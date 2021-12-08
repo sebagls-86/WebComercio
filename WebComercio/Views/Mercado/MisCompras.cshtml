@@ -1,12 +1,25 @@
 ﻿@model IEnumerable<WebComercio.Compra>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Mis Compras";
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
 
-<div class="container my-5">
+<div class="container">
+    <h1>Compras</h1>
+</div>
+
+<div class="container my-3">
+
     <div class="row">
-        <h1>Compras</h1> <img class="ml-2" src="~/IMG/compras/compras.png" alt="compras" width="53" height="53">
+
+        <div class="col -md-4">
+
+            <div class="card my-2" style="width: 15rem;">
+                <img src="~/IMG/compras/compras.jpg" class="card-img-top" alt="compras">
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -42,7 +55,7 @@
                             @Html.DisplayFor(modelItem => item.Total)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
+                            <a asp-action="DetailsCompras" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Ver detalle"></a>
 
                         </td>
                     </tr>

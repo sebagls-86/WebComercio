@@ -138,8 +138,10 @@ namespace WebComercio.Controllers
         }
 
         //detalle producto
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int identificador)
         {
+
+            ViewBag.Identificador = identificador;
             if (id == null)
             {
                 return NotFound();
@@ -253,6 +255,36 @@ namespace WebComercio.Controllers
             if (ModelState.IsValid)
             {
 
+                
+                //Usuario usuarioEncontrado = db.usuarios.Where(u => u.UsuarioId == Id_Usuario).FirstOrDefault();
+                //Producto productoEncontrado = db.productos.Where(p => p.ProductoId == Id_Producto).FirstOrDefault();
+
+                //if (MercadoHelper.SonMenoresACero(new List<int> { Id_Producto, Cantidad, Id_Usuario }))
+                //{
+                //    sePudoAgregar = false;
+                //    throw new Excepciones("Los parametros numericos deben ser mayor a 0");
+
+                //}
+                //else if (Cantidad > productoEncontrado.Cantidad)
+                //{
+                //    sePudoAgregar = false;
+                //    throw new Excepciones("La cantidad que se quiere agregar es mayor al stock disponible.");
+                //}
+                //else
+                //{
+                //    Carro cart = usuarioEncontrado.Carro;
+                //    cart.ProductosCompra.Add(productoEncontrado);
+                //    db.carro.Update(cart);
+                //    db.SaveChanges();
+                //    cart.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
+                //    db.carro.Update(cart);
+                //    db.SaveChanges();
+                //    sePudoAgregar = true;
+                //}
+
+
+
+
 
                 int usuarioID = 3;
 
@@ -299,13 +331,9 @@ namespace WebComercio.Controllers
             return RedirectToAction("Index");
         }
 
+
         public async Task<IActionResult> MisDatos(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.UsuarioId == id);
             if (usuario == null)
             {
@@ -313,6 +341,17 @@ namespace WebComercio.Controllers
             }
 
             return View(usuario);
+        }
+
+        public async Task<IActionResult> MisCompras(int id)
+        {
+            return View(await _context.compras.Where(u => u.idUsuario == id).ToListAsync());
+        }
+
+
+        public async Task<IActionResult> DetailsCompras(int id)
+        {
+            return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).ToListAsync());
         }
 
         public async Task<IActionResult> EditData(int? id, string mensaje)
