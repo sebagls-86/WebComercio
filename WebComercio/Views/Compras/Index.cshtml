@@ -29,6 +29,9 @@
                 <thead>
                     <tr>
                         <th>
+                            @Html.DisplayNameFor(model => model.CompraId)
+                        </th>
+                        <th>
                             @Html.DisplayNameFor(model => model.idUsuario)
                         </th>
                         <th>
@@ -40,19 +43,21 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.idUsuario)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Total)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
-                                <a asp-action="Details" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/detalles.png" data-bs-toggle="tooltip" title="Detalles"></a>
-                                <a asp-action="Delete" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/eliminar.png" data-bs-toggle="tooltip" title="Eliminar"></a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompraId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.idUsuario)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
+
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
