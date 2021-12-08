@@ -24,6 +24,7 @@ namespace WebComercio.Controllers
             return View();
         }
 
+        
         public IActionResult Login([Bind("UsuarioId, Password")] Usuario usuario)
         {
             if (ModelState.IsValid)
@@ -43,7 +44,7 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-
+                        
                         return RedirectToAction("Index", "Mercado", new { identificador = loginUsuario.UsuarioId });
 
                     }

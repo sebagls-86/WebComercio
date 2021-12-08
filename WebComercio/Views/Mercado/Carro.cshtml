@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Carrito de Compras";
-    Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
 
 <h1 class="pb-4">Carrito de Compras</h1>
@@ -11,7 +11,7 @@
 <table class="table mt-5 col-8">
     <thead>
         <tr>
-            
+
             <th>
                 @Html.DisplayNameFor(model => model.Producto)
             </th>
@@ -24,21 +24,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.Producto.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cantidad)
-            </td>
-            <td>
-                @Html.ActionLink("Editar Cantidad", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Detalle Producto", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Quitar del Carro", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar Cantidad", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Detalle Producto", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Quitar del Carro", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
     </tbody>
+
 </table>
+    @Html.ActionLink("Finalizar Compra", "Comprar", new { identificador = 2 })
