@@ -24,32 +24,55 @@ namespace WebComercio.Controllers
             return View();
         }
 
-        
+
         public IActionResult Login(int Cuil, string Password)
         {
             if (ModelState.IsValid)
             {
-
                 try
                 {
-                   
-                    Usuario loginUsuario = _context.usuarios.Where(u => u.Cuil == Cuil && u.Password == Password).FirstOrDefault();
+                    Usuario usuario = _context.usuarios.Where(u => u.Cuil == Cuil).FirstOrDefault();
 
-                    if (loginUsuario == null)
+                    if (usuario != null)
                     {
-                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario o contraseña incorrectos", identificador = 0 });
-                    }
-                    else if (loginUsuario.TipoUsuario == 1)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        
-                        return RedirectToAction("Index", "Mercado", new { identificador = loginUsuario.Cuil });
+                        if (!usuario.Bloqueado && usuario.Intentos < 3)
+                        {
+                            if (usuario.Password == Password)
+                            {
+                                usuario.Intentos = 0;
+                                _context.usuarios.Update(usuario);
+                                _context.SaveChanges();
 
+                                if (usuario.TipoUsuario == 1)
+                                {
+                                    return RedirectToAction("Index", "Home");
+                                }
+                                else
+                                {
+                                    return RedirectToAction("Index", "Mercado", new { identificador = usuario.Cuil });
+                                }
+                            }
+                            else
+                            {
+                                usuario.Intentos++;
+                                _context.usuarios.Update(usuario);
+                                _context.SaveChanges();
+                                return RedirectToAction("Index", "Login", new { mensaje = "Usuario o contraseña incorrectos", identificador = 0 });
+                            }
+                        }
+                        else if (!usuario.Bloqueado)
+                        {
+                            usuario.Bloqueado = true;
+                            usuario.Intentos = 0;
+                            _context.usuarios.Update(usuario);
+                            _context.SaveChanges();
+                            return RedirectToAction("Index", "Login", new { mensaje = "Usuario bloqueado", identificador = 0 });
+                        }
+                        else if (usuario.Bloqueado)
+                        {
+                            return RedirectToAction("Index", "Login", new { mensaje = "Usuario bloqueado. Comuniquese con el administrador", identificador = 0 });
+                        }
                     }
-
                 }
                 catch (Exception)
                 {
