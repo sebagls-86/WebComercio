@@ -33,9 +33,9 @@ namespace WebComercio.Controllers
                 {
                     Usuario loginUsuario = _context.usuarios.Where(u => u.UsuarioId == usuario.UsuarioId && u.Password == usuario.Password).FirstOrDefault();
 
-                    if (usuario == null)
+                    if (loginUsuario == null)
                     {
-                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario o contraseña incorrectos", identificador = 3 });
+                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario o contraseña incorrectos", identificador = 0 });
                     }
                     else if (loginUsuario.TipoUsuario == 1)
                     {
@@ -43,14 +43,15 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-                        int idUsuario = loginUsuario.UsuarioId;
-                        return RedirectToAction("Index", "Mercado");
+
+                        return RedirectToAction("Index", "Mercado", new { identificador = loginUsuario.UsuarioId });
+
                     }
 
                 }
                 catch (Exception)
                 {
-                    return RedirectToAction("Index", "Login", new { mensaje = "Error", identificador = 1 });
+                    return RedirectToAction("Index", "Login", new { mensaje = "Error", identificador = -1 });
                 }
 
             }

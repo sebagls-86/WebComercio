@@ -1,7 +1,8 @@
 ﻿@model WebComercio.Compra
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Mis Datos";
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
 
 <div class="container my-5">
@@ -34,5 +35,5 @@
 
 
 <div class="text-right col-md-5">
-    <a asp-action="Edit" asp-route-id="@Model.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
+    <a asp-action="EditData" asp-route-id="@Model.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
 </div>
