@@ -254,13 +254,9 @@ namespace WebComercio.Controllers
             return RedirectToAction("Index");
         }
 
+
         public async Task<IActionResult> MisDatos(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.UsuarioId == id);
             if (usuario == null)
             {
@@ -268,6 +264,17 @@ namespace WebComercio.Controllers
             }
 
             return View(usuario);
+        }
+
+        public async Task<IActionResult> MisCompras(int id)
+        {
+            return View(await _context.compras.Where(u => u.idUsuario == id).ToListAsync());
+        }
+
+
+        public async Task<IActionResult> DetailsCompras(int id)
+        {
+            return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).ToListAsync());
         }
 
         public async Task<IActionResult> EditData(int? id, string mensaje)
