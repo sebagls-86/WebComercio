@@ -241,19 +241,10 @@ namespace WebComercio.Controllers
             return RedirectToAction("Index");
         }
 
-        public  IActionResult Carro(int id)
+        public  async Task<IActionResult> Carro(int id)
         {
-            
-
-            //var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).FirstOrDefaultAsync(m => m.Id_Carro == id);
-            var Carro_productos =  _context.carro.Where(u => u.UsuarioId == id);
-
-            if (Carro_productos == null)
-            {
-                return NotFound();
-            }
-            ViewBag.Carroproductos = Carro_productos;
-            return View(Carro_productos);
+            var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
+            return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
 
 
