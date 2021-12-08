@@ -25,14 +25,15 @@ namespace WebComercio.Controllers
         }
 
         
-        public IActionResult Login([Bind("UsuarioId, Password")] Usuario usuario)
+        public IActionResult Login(int Cuil, string Password)
         {
             if (ModelState.IsValid)
             {
 
                 try
                 {
-                    Usuario loginUsuario = _context.usuarios.Where(u => u.UsuarioId == usuario.UsuarioId && u.Password == usuario.Password).FirstOrDefault();
+                   
+                    Usuario loginUsuario = _context.usuarios.Where(u => u.Cuil == Cuil && u.Password == Password).FirstOrDefault();
 
                     if (loginUsuario == null)
                     {
@@ -45,7 +46,7 @@ namespace WebComercio.Controllers
                     else
                     {
                         
-                        return RedirectToAction("Index", "Mercado", new { identificador = loginUsuario.UsuarioId });
+                        return RedirectToAction("Index", "Mercado", new { identificador = loginUsuario.Cuil });
 
                     }
 
@@ -56,7 +57,7 @@ namespace WebComercio.Controllers
                 }
 
             }
-            return View(usuario);
+            return View(Cuil);
         }
     }
 }
