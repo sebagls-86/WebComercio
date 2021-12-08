@@ -193,5 +193,89 @@ namespace WebComercio.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> MisDatos(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.UsuarioId == id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return View(usuario);
+        }
+
+        public async Task<IActionResult> EditData(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var usuario = await _context.usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return View(usuario);
+        }
+
+        // POST: Usuarios/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditData(int id, string nueva1, string nueva2, [Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,MiCarro,TipoUsuario")] Usuario usuario)
+        {
+            if (id != usuario.UsuarioId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    if (nueva1 != null)
+                    {
+
+                        if (nueva1 == nueva2)
+                        {
+                            usuario.Password = nueva2;
+                        }
+                        else
+                        {
+                            ViewBag.Mensaje = "Las contraseñas deben coincidir";
+                        }
+                    }
+                    _context.Update(usuario);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsuarioExists(usuario.UsuarioId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(usuario);
+        }
+
+        private bool UsuarioExists(int id)
+        {
+            return _context.usuarios.Any(e => e.UsuarioId == id);
+        }
     }
 }
