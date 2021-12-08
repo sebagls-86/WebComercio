@@ -1,16 +1,14 @@
 ﻿@model IEnumerable<WebComercio.Carro_productos>
 
 @{
-    ViewData["Title"] = "Carro";
+    ViewData["Title"] = "Carrito de Compras";
     Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
 }
 
-<h1>Carro</h1>
+<h1 class="pb-4">Carrito de Compras</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+<table class="table mt-5 col-8">
     <thead>
         <tr>
             
@@ -20,7 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Cantidad)
             </th>
-            <th></th>
+            <th>
+                Acciones
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -34,9 +34,9 @@
                 @Html.DisplayFor(modelItem => item.Cantidad)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Editar Cantidad", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Detalle Producto", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Quitar del Carro", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

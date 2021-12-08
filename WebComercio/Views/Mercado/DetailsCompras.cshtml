@@ -1,7 +1,8 @@
-﻿@model IEnumerable<WebComercio.Compra>
+﻿@model IEnumerable<WebComercio.Productos_compra>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Detalles Compra";
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
 
 <div class="container">
@@ -29,15 +30,20 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.CompraId)
+                            @Html.DisplayNameFor(model => model.Id_compra)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.idUsuario)
+                            @Html.DisplayNameFor(model => model.Id_producto)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Total)
+                            @Html.DisplayNameFor(model => model.Cantidad_producto)
                         </th>
-                        <th>Accion</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Producto.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Producto.Precio)
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,18 +51,21 @@
                     {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CompraId)
+                            @Html.DisplayFor(modelItem => item.Id_compra)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.idUsuario)
+                            @Html.DisplayFor(modelItem => item.Id_producto)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Total)
+                            @Html.DisplayFor(modelItem => item.Cantidad_producto)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Editar"></a>
+                            @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Producto.Precio)
+                        </td>
 
-                        </td>
                     </tr>
                     }
                 </tbody>
