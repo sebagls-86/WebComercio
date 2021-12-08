@@ -43,6 +43,7 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
+                        int idUsuario = loginUsuario.UsuarioId;
                         return RedirectToAction("Index", "Mercado");
                     }
 

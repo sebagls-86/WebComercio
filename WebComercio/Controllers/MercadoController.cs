@@ -133,19 +133,47 @@ namespace WebComercio.Controllers
             if (ModelState.IsValid)
             {
 
+
                 int usuarioID = 4;
+
                 Usuario usuarioEncontrado =  _context.usuarios.Include(c => c.Carro).FirstOrDefault(u => u.UsuarioId == usuarioID);
-                Producto productoEncontrado =  _context.productos.FirstOrDefault(p => p.ProductoId == ProductoId);
+                Producto productoEncontrado =  _context.productos.Include(c => c.Carro_productos).FirstOrDefault(p => p.ProductoId == ProductoId);
 
 
                 Carro cart = usuarioEncontrado.Carro;
-                cart.ProductosCompra.Add(productoEncontrado);
-                _context.carro.Update(cart);
-                _context.SaveChanges();
 
-                cart.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
-                _context.carro.Update(cart);
-                _context.SaveChanges();
+
+                //Producto productoCarro = cart.Carro_productos.FirstOrDefault(p => p.Id_Producto == productoEncontrado.ProductoId);
+                bool estaEnCarro = false;
+
+                foreach (Producto prod in cart.ProductosCompra)
+                {
+                    foreach (Carro_productos cp in cart.Carro_productos)
+                    {
+                        if (cp.Id_Carro == cart.CarroId && cp.Id_Producto == prod.ProductoId)
+                        {
+                            cp.Cantidad += Cantidad;
+                            _context.carro.Update(cart);
+                            _context.SaveChanges();
+                            estaEnCarro = true;
+                        }
+                    }
+                }
+
+
+                if (!estaEnCarro)
+                {
+                    cart.ProductosCompra.Add(productoEncontrado);
+                    _context.carro.Update(cart);
+                    _context.SaveChanges();
+
+                    cart.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
+                    _context.carro.Update(cart);
+                    _context.SaveChanges();
+                }
+                
+                
+                
 
             }
             return RedirectToAction("Index");
