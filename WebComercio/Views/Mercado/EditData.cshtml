@@ -16,7 +16,7 @@
         <div class="container">
             <div class="col">
                 <div class="col-md-10">
-                    <form asp-action="EditData">
+                    <form id="formDatos" asp-action="EditData">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="UsuarioId" />
                         <div class="form-group">
@@ -47,6 +47,7 @@
                             <input asp-for="Password" type="password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
+                        <div id="error" class="oculta"><p id="messageError" class="messageError text-danger"></p></div>
                         <div class="form-group">
                             <label asp-for="Password" class="control-label">Nueva contraseña</label>
                             <input asp-for="Password" name="nueva1" type="password" class="form-control" />
@@ -54,12 +55,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Password" class="control-label">Repetir contraseña</label>
-                            <input asp-for="Password" name="nueva2" type="password" class="form-control" />
+                            <input asp-for="Password" id="pass1" name="nueva2" type="password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-group d-none">
                             <label asp-for="MiCarro" class="control-label"></label>
-                            <input asp-for="MiCarro" class="form-control" />
+                            <input asp-for="MiCarro" id="pass2" class="form-control" />
                             <span asp-validation-for="MiCarro" class="text-danger"></span>
                         </div>
                         <div class="form-group d-none">
