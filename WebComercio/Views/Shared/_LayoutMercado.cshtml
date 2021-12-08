@@ -19,18 +19,19 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
-
-                            <li class="nav-item ">
-                                <a class="nav-link text-dark " asp-area="" asp-controller="Login" asp-action="Index">Ingresar</a>
-                            </li>
-
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Registrar" asp-action="Index">Registro</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Mercado" asp-action="Index">Mercado</a>
                             </li>
-                           
+
                         </ul>
                     </div>
-                </div>>
+                    <div class="d-flex justify-content-end">
+                        <a class="nav-link text-dark" asp-action="MisDatos" asp-controller="Mercado" asp-route-id="@ViewBag.identificador">Mis Datos</a>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a class="nav-link text-dark" asp-action="MisCompras" asp-controller="Mercado" asp-route-id="@ViewBag.identificador">Mis Compras</a>
+                    </div>
+                </div>
             </nav>
     </header>
     <div class="container">

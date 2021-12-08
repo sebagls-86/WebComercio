@@ -41,6 +41,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.TipoUsuario)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Intentos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bloqueado)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -67,6 +73,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TipoUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Intentos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bloqueado)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UsuarioId">Edit</a> |

@@ -67,27 +67,46 @@ namespace WebComercio.Controllers
 
         public async Task<IActionResult> Create([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
         {
-            if (ModelState.IsValid)
             {
+                if (ModelState.IsValid)
+                {
 
+                    try
+                    {
+                        Usuario usu = _context.usuarios.Where(u => u.Cuil == usuario.Cuil).FirstOrDefault();
 
-                Carro carro = new Carro();
-                _context.Add(usuario);
-                _context.Add(carro);
-                await _context.SaveChangesAsync();
+                        if (usu != null)
+                        {
+                            return RedirectToAction("Index", "Registrar", new { mensaje = "CUIL ya registrado", identificador = 1 });
+                        }
+                        else
+                        {
 
-                Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
-                usuario.MiCarro = lastCarro.CarroId;
-                Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
-                carro.UsuarioId = lasUsuario.UsuarioId;
-                _context.usuarios.Update(usuario);
-                _context.carro.Update(carro);
-                await _context.SaveChangesAsync();
+                            Carro carro = new Carro();
 
+                            _context.Add(usuario);
+                            _context.Add(carro);
+                            await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                            Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
+                            usuario.MiCarro = lastCarro.CarroId;
+                            Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
+                            carro.UsuarioId = lasUsuario.UsuarioId;
+                            _context.usuarios.Update(usuario);
+                            _context.carro.Update(carro);
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("Index", "Login", new { mensaje = "Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("Index", "Registrar", new { mensaje = "Error", identificador = 1 });
+                    }
+
+                }
+                return View(usuario);
             }
-            return View(usuario);
         }
 
         // GET: Usuarios/Edit/5
