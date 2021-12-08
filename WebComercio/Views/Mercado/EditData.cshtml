@@ -10,6 +10,7 @@
     <h1> <a asp-action="Index"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Editar Usuarios</h1>
 </div>
 
+
 <div class="container">
     <div class="row">
         <div class="container">
@@ -37,6 +38,9 @@
                             <label asp-for="Mail" class="control-label"></label>
                             <input asp-for="Mail" class="form-control" />
                             <span asp-validation-for="Mail" class="text-danger"></span>
+                        </div>
+                        <div class="text-danger">
+                            @ViewBag.Mensaje
                         </div>
                         <div class="form-group">
                             <label asp-for="Password" class="control-label">Contraseña actual</label>
@@ -67,7 +71,7 @@
                             <input type="submit" value="Guardar" class="btn btn-primary " />
                         </div>
                     </form>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
