@@ -146,30 +146,107 @@ namespace WebComercio.Controllers
             {
                 return NotFound();
             }
-
             var producto = await _context.productos.Include(p => p.Cat).FirstOrDefaultAsync(m => m.ProductoId == id);
             if (producto == null)
             {
                 return NotFound();
             }
-
             return View(producto);
         }
 
-        public async Task<IActionResult> Carro()
+        private bool ActualizarStockProducto(int idProducto, int cantidad)
         {
+            Producto productoEncontrado = _context.productos.FirstOrDefault(producto => producto.ProductoId == idProducto);
 
-
-
-            //var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).FirstOrDefaultAsync(m => m.Id_Carro == id);
-            var Carro_productos = await _context.Carro_productos.Include(p => p.Producto).Include(c => c.Carro).ToListAsync();
-
-            if (Carro_productos == null)
+            if (productoEncontrado != null)
+            {
+                productoEncontrado.Cantidad -= cantidad;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public async Task<IActionResult> Comprar(string identificador)
+        {
+            int id = int.Parse(identificador);
+            if (id == null)
             {
                 return NotFound();
             }
-            ViewBag.Carroproductos = Carro_productos;
-            return View(Carro_productos);
+            
+
+            Double precioTotal = 0;
+            bool sePudoComprar = false;
+            double IVA = 21;
+            Usuario usuario = _context.usuarios.Include(c => c.Carro).FirstOrDefault(usuario => usuario.UsuarioId == id);
+            Carro carro = usuario.Carro;
+
+            try
+            {
+
+                foreach (Producto prod in carro.ProductosCompra)
+                {
+
+                    foreach (Carro_productos cp in carro.Carro_productos)
+                        if (cp.Id_Carro == carro.CarroId && cp.Id_Producto == prod.ProductoId)
+                            precioTotal += cp.Cantidad * prod.Precio;
+                }
+
+                precioTotal = MercadoHelper.CalcularPorcentaje(precioTotal, IVA);
+                Compra compra = new Compra(usuario.UsuarioId, precioTotal);
+                _context.compras.Add(compra);
+                _context.SaveChanges();
+
+                sePudoComprar = true;
+
+                if (sePudoComprar)
+                {
+                    try
+                    {
+                        foreach (Producto prod in carro.ProductosCompra)
+                        {
+
+                            compra.CompraProducto.Add(prod);
+
+                            _context.compras.Update(compra);
+                            _context.SaveChanges();
+                            foreach (Carro_productos cp in carro.Carro_productos)
+                            {
+                                if (cp.Id_Carro == carro.CarroId && cp.Id_Producto == prod.ProductoId)
+                                    compra.Productos_compra.Last<Productos_compra>().Cantidad_producto = cp.Cantidad;
+                                ActualizarStockProducto(cp.Id_Producto, cp.Cantidad);
+                                _context.compras.Update(compra);
+                                _context.SaveChanges();
+                            }
+
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        sePudoComprar = false;
+                    }
+                    sePudoComprar = true;
+                }
+                else
+                {
+                    sePudoComprar = false;
+                }
+
+
+            }
+            catch (Exception)
+            {
+                sePudoComprar = false;
+            }
+            
+
+            return RedirectToAction("Index");
+        }
+
+        public  async Task<IActionResult> Carro(int id)
+        {
+            var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
+            return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
 
 
@@ -209,7 +286,7 @@ namespace WebComercio.Controllers
 
 
 
-                int usuarioID = 4;
+                int usuarioID = 3;
 
                 Usuario usuarioEncontrado = _context.usuarios.Include(c => c.Carro).FirstOrDefault(u => u.UsuarioId == usuarioID);
                 Producto productoEncontrado = _context.productos.Include(c => c.Carro_productos).FirstOrDefault(p => p.ProductoId == ProductoId);
