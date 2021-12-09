@@ -7,13 +7,18 @@
 
 <h1 class="pb-4">Carrito de Compras</h1>
 
-
+<div>
+    <form method="get" asp-action="Index">
+        <input type="submit" value="Volver" class="btn btn-primary" />
+        <input hidden name="identificador" value="@ViewBag.identificador" />
+    </form>
+</div>
 <table class="table mt-5 col-8">
     <thead>
         <tr>
 
             <th>
-                @Html.DisplayNameFor(model => model.Producto)
+                @Html.DisplayNameFor(model => model.Producto.Nombre)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Cantidad)
@@ -29,7 +34,7 @@
             <tr>
 
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id_Carro)
+                    @Html.DisplayFor(modelItem => item.Producto.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id_Producto)
@@ -46,8 +51,8 @@
 </table>
 
 <div>
-    <form method="get" asp-action="Index">
-        <input type="submit" value="Volver" class="btn btn-primary" />
+    <form method="get" asp-action="Comprar">
+        <input type="submit" value="Comprar" class="btn btn-primary" />
         <input hidden name="identificador" value="@ViewBag.identificador" />
     </form>
 </div>

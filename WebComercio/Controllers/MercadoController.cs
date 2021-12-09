@@ -25,7 +25,8 @@ namespace WebComercio.Controllers
             productosOrdenados = _context.productos.OrderBy(producto => producto.ProductoId).ToList();
             List<Categoria> categorias = new List<Categoria>();
             categorias = _context.categorias.ToList();
-
+            var productosEncarro = _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == identificador).Count();
+            ViewBag.productosEnCarro = productosEncarro;
             ViewBag.Productos = productosOrdenados;
             ViewBag.categorias = categorias;
             ViewBag.Mensaje = mensaje;

@@ -41,8 +41,8 @@
         <input type="hidden" asp-for="ProductoId" />
 
         <div class="form-group">
-            <label for="Cantidad" class="control-label">Ingrese una cantidad</label>
-            <input type="number" asp-for="Cantidad" class="form-control" value="">
+            <label for="Cantidad" class="control-label" >Ingrese una cantidad</label>
+            <input type="number" asp-for="Cantidad" min="1" max="@Html.ValueFor(model => model.Cantidad)" class="form-control" value="1">
 
         </div>
 
