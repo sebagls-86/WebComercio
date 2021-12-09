@@ -138,10 +138,10 @@ namespace WebComercio.Controllers
         }
 
         //detalle producto
-        public async Task<IActionResult> Details(int? id, int identificador)
+        public async Task<IActionResult> Details(int id, int identificador)
         {
 
-            ViewBag.Identificador = identificador;
+            ViewBag.identificador = identificador;
             if (id == null)
             {
                 return NotFound();
@@ -243,19 +243,21 @@ namespace WebComercio.Controllers
             return RedirectToAction("Index");
         }
 
-        public  async Task<IActionResult> Carro(int id)
+        public  async Task<IActionResult> Carro(int id, int identificador)
         {
+            ViewBag.identificador = identificador;
             var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
             return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
 
-
-        public IActionResult AgregarProducto(int ProductoId, int Cantidad)
+        //[HttpPost]
+        public IActionResult AgregarProducto(int ProductoId, int Cantidad, int identificador)
         {
+            int usuarioID = identificador;
             if (ModelState.IsValid)
             {
 
-                
+
                 //Usuario usuarioEncontrado = db.usuarios.Where(u => u.UsuarioId == Id_Usuario).FirstOrDefault();
                 //Producto productoEncontrado = db.productos.Where(p => p.ProductoId == Id_Producto).FirstOrDefault();
 
@@ -286,7 +288,7 @@ namespace WebComercio.Controllers
 
 
 
-                int usuarioID = 3;
+                /*int usuarioID = identificador;*/
 
                 Usuario usuarioEncontrado = _context.usuarios.Include(c => c.Carro).FirstOrDefault(u => u.UsuarioId == usuarioID);
                 Producto productoEncontrado = _context.productos.Include(c => c.Carro_productos).FirstOrDefault(p => p.ProductoId == ProductoId);
@@ -327,13 +329,15 @@ namespace WebComercio.Controllers
 
 
 
+                return RedirectToAction("Index", "Mercado", new { identificador = usuarioEncontrado.UsuarioId });
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Mercado", new { identificador = identificador });
         }
 
 
-        public async Task<IActionResult> MisDatos(int? id)
+        public async Task<IActionResult> MisDatos(int? id, int identificador)
         {
+            ViewBag.identificador = identificador;
             var usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.UsuarioId == id);
             if (usuario == null)
             {
@@ -343,8 +347,9 @@ namespace WebComercio.Controllers
             return View(usuario);
         }
 
-        public async Task<IActionResult> MisCompras(int id)
+        public async Task<IActionResult> MisCompras(int id, int identificador)
         {
+            ViewBag.identificador = identificador;
             return View(await _context.compras.Where(u => u.idUsuario == id).ToListAsync());
         }
 
