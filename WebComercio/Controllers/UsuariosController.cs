@@ -130,7 +130,7 @@ namespace WebComercio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,MiCarro,TipoUsuario")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,MiCarro,TipoUsuario,Bloqueado")] Usuario usuario)
         {
             if (id != usuario.UsuarioId)
             {

@@ -32,7 +32,9 @@ namespace WebComercio.Data
         {
 
 
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-L0586C2;Initial Catalog=comercio;Integrated Security=True");
+
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-ETLU83T\SQLEXPRESS;Initial Catalog=comercio;Integrated Security=True");
+
 
         }
 
