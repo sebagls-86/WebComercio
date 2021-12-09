@@ -44,24 +44,30 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CompraId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.idUsuario)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Total)
-                        </td>
-                        <td>
-                            <a asp-action="DetailsCompras" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Ver detalle"></a>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CompraId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.idUsuario)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            <td>
+                                <a asp-action="DetailsCompras" asp-route-id="@item.CompraId"><img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Ver detalle"></a>
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
+        <form method="get" asp-action="Index">
+            <div class="col-md-12">
+                <input type="submit" value="Volver" class="btn btn-primary" />
+                <input hidden name="identificador" value="@ViewBag.identificador" />
+            </div>
+        </form>
     </div>
 </div>

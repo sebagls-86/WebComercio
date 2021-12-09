@@ -16,7 +16,7 @@
     <form asp-controller="Mercado" asp-action="Index" method="get">
         <p>
             Nombre del producto <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
-            
+
         </p>
 
         <fieldset>
@@ -62,60 +62,58 @@
                     }
                 }
             </select>
-            
+
             <input type="submit" value="Filtrar por Categoria" class="btn btn-primary" />
         </p>
 
     </form>
 </div>
 
-
-<div>
-    <form>
-       
-    </form>
-</div>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm })
-            </th>
-            <th></th>
-        </tr>
-
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<form method="get" asp-action="Details">
+    
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>
-                    @item.Nombre
-                </td>
-                <td>
-                    @item.Precio
-                </td>
-                <td>
-                    @item.Cantidad
-                </td>
-                <td>
-                    @item.Cat.Nombre
-                </td>
-                <td>
-                    
-                    <a asp-action="Details" asp-route-id="@item.ProductoId">Ver Producto</a>
-                </td>
+                <th>
+                    @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm })
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+
+        </thead>
+
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Nombre
+                    </td>
+                    <td>
+                        @item.Precio
+                    </td>
+                    <td>
+                        @item.Cantidad
+                    </td>
+                    <td>
+                        @item.Cat.Nombre
+                    </td>
+                    <td>
+                        <a href="/Mercado/Details/@item.ProductoId?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</form>

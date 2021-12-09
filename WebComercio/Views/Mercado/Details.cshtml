@@ -37,9 +37,9 @@
         </dd>
     </dl>
     <form asp-action="AgregarProducto" method="get">
-
+        <input type="hidden" name="identificador" value="@ViewBag.identificador" />
         <input type="hidden" asp-for="ProductoId" />
-        
+
         <div class="form-group">
             <label for="Cantidad" class="control-label">Ingrese una cantidad</label>
             <input type="number" asp-for="Cantidad" class="form-control" value="">
@@ -56,6 +56,8 @@
 
 </div>
 <div>
-    
-    <a asp-action="Index">Volver</a>
+    <form method="get" asp-action="Index">
+        <input type="submit" value="Volver" class="btn btn-primary" />
+        <input hidden name="identificador" value="@ViewBag.identificador" />
+    </form>
 </div>

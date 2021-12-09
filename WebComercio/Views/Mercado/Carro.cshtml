@@ -44,4 +44,10 @@
     </tbody>
 
 </table>
-    @Html.ActionLink("Finalizar Compra", "Comprar", new { identificador = 2 })
+
+<div>
+    <form method="get" asp-action="Index">
+        <input type="submit" value="Volver" class="btn btn-primary" />
+        <input hidden name="identificador" value="@ViewBag.identificador" />
+    </form>
+</div>
