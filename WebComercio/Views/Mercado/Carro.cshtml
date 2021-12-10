@@ -37,12 +37,16 @@
                     @Html.DisplayFor(modelItem => item.Producto.Nombre)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id_Producto)
+                    @Html.DisplayFor(modelItem => item.Cantidad)
                 </td>
                 <td>
-                    @Html.ActionLink("Editar Cantidad", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Detalle Producto", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Quitar del Carro", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a href="/Mercado/Details/@item.Id_Producto?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
+                    
+                    <form method="get" asp-action="QuitarDelCarro">
+                        <input type="submit" value="Quitar del carro" class="btn btn-primary" />
+                        <input hidden name="id" value="@item.Id_Producto" />
+                        <input hidden name="identificador" value="@ViewBag.identificador" />
+                    </form>
                 </td>
             </tr>
         }

@@ -18,11 +18,11 @@ namespace WebComercio.Controllers
         }
 
 
-        public async Task<IActionResult> Index(string mensaje, int identificador, string searchString, string orderByName, string orderByPrice, string orderByNameDesc, string orderByPriceDesc, string Cat, string sortOrder)
+        public async Task<IActionResult> Index(string mensaje, int identificador, string searchString, string orderByName, string orderByPrice, string Cat, string sortOrder)
 
         {
             List<Producto> productosOrdenados = new List<Producto>();
-            productosOrdenados = _context.productos.OrderBy(producto => producto.ProductoId).ToList();
+            productosOrdenados = _context.productos.Where(producto => producto.Cantidad > 0).OrderBy(producto => producto.ProductoId).ToList();
             List<Categoria> categorias = new List<Categoria>();
             categorias = _context.categorias.ToList();
             var productosEncarro = _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == identificador).Count();
@@ -39,11 +39,11 @@ namespace WebComercio.Controllers
             ViewData["CurrentFilter"] = searchString;
             ViewData["ByName"] = orderByName;
             ViewData["ByPrice"] = orderByPrice;
-            ViewData["ByNameDesc"] = orderByNameDesc;
-            ViewData["ByPriceDesc"] = orderByPriceDesc;
+
 
 
             var productos = from p in _context.productos.Include(p => p.Cat)
+                            where p.Cantidad > 0
                             select p;
 
 
@@ -51,44 +51,42 @@ namespace WebComercio.Controllers
             {
                 productos = productos.Where(u => u.Nombre.Contains(searchString));
 
-                if (orderByName == "on" && orderByPrice == "on")
+                if (orderByName == "1" && orderByPrice == "1")
                 {
                     productos = productos.OrderBy(p => p.Nombre).ThenBy(p => p.Precio);
                 }
 
-                else if (orderByNameDesc == "on" && orderByPriceDesc == "on")
+                else if (orderByName == "-1" && orderByPrice == "-1")
                 {
                     productos = productos.OrderByDescending(p => p.Nombre).ThenByDescending(p => p.Precio);
                 }
-                else if (orderByNameDesc == "on" && orderByPrice == "on")
+                else if (orderByName == "-1" && orderByPrice == "1")
                 {
                     productos = productos.OrderByDescending(p => p.Nombre).ThenBy(p => p.Precio);
                 }
 
-                else if (orderByName == "on" && orderByPriceDesc == "on")
+                else if (orderByName == "1" && orderByPrice == "-1")
                 {
                     productos = productos.OrderBy(p => p.Nombre).ThenByDescending(p => p.Precio);
                 }
 
-                else if (orderByPrice == "on")
+                else if (orderByPrice == "1")
                 {
                     productos = productos.OrderBy(p => p.Precio);
                 }
-                else if (orderByName == "on")
+                else if (orderByName == "1")
                 {
                     productos = productos.OrderBy(p => p.Nombre);
                 }
 
-                else if (orderByPriceDesc == "on")
+                else if (orderByPrice == "-1")
                 {
                     productos = productos.OrderByDescending(p => p.Precio);
                 }
-                else if (orderByNameDesc == "on")
+                else if (orderByName == "-1")
                 {
                     productos = productos.OrderByDescending(p => p.Nombre);
                 }
-
-                ViewBag.Productos = productos;
 
             }
 
@@ -98,31 +96,24 @@ namespace WebComercio.Controllers
             {
                 case "name_desc":
                     productos = productos.OrderByDescending(p => p.Nombre).ThenByDescending(p => p.Precio);
-                    ViewBag.Productos = productos;
                     break;
                 case "Price":
                     productos = productos.OrderBy(p => p.Precio);
-                    ViewBag.Productos = productos;
                     break;
                 case "price_desc":
-                    ViewBag.Productos = productos.OrderByDescending(p => p.Precio).ThenBy(p => p.Nombre);
-                    Console.WriteLine(productos);
+                    productos.OrderByDescending(p => p.Precio).ThenBy(p => p.Nombre);
                     break;
                 case "Amount":
                     productos = productos.OrderBy(p => p.Cantidad);
-                    ViewBag.Productos = productos;
                     break;
                 case "amount_desc":
                     productos = productos.OrderByDescending(p => p.Cantidad);
-                    ViewBag.Productos = productos;
                     break;
                 case "Category":
                     productos = productos.OrderBy(p => p.Cat.Nombre);
-                    ViewBag.Productos = productos;
                     break;
                 case "category_desc":
                     productos = productos.OrderByDescending(p => p.Cat.Nombre);
-                    ViewBag.Productos = productos;
                     break;
 
             }
@@ -131,9 +122,8 @@ namespace WebComercio.Controllers
             if (!String.IsNullOrEmpty(Cat))
             {
                 productos = productos.Where(u => u.Cat.Nombre.Contains(Cat));
-                ViewBag.Productos = productos;
             }
-
+            ViewBag.identificador = identificador;
 
             return View(await productos.ToListAsync());
         }
@@ -143,10 +133,7 @@ namespace WebComercio.Controllers
         {
 
             ViewBag.identificador = identificador;
-            if (id == null)
-            {
-                return NotFound();
-            }
+
             var producto = await _context.productos.Include(p => p.Cat).FirstOrDefaultAsync(m => m.ProductoId == id);
             if (producto == null)
             {
@@ -167,31 +154,25 @@ namespace WebComercio.Controllers
             }
             return false;
         }
-        public async Task<IActionResult> Comprar(string identificador)
+        public IActionResult Comprar(int identificador, string mensaje)
         {
-            int id = int.Parse(identificador);
-            if (id == null)
-            {
-                return NotFound();
-            }
-            
+            ViewBag.mensaje = mensaje;
+            ViewBag.identificador = identificador;
 
             Double precioTotal = 0;
             bool sePudoComprar = false;
             double IVA = 21;
-            Usuario usuario = _context.usuarios.Include(c => c.Carro).FirstOrDefault(usuario => usuario.UsuarioId == id);
-            Carro carro = usuario.Carro;
+            Usuario usuario = _context.usuarios.Where(usuario => usuario.UsuarioId == identificador).FirstOrDefault();
+            Carro carrito = _context.carro.Include(c => c.Carro_productos).Include(p => p.ProductosCompra).FirstOrDefault(usuario => usuario.Usuario.UsuarioId == identificador);
+
 
             try
             {
 
-                foreach (Producto prod in carro.ProductosCompra)
-                {
+                foreach (Carro_productos cp in carrito.Carro_productos)
+                    if (cp.Id_Carro == carrito.CarroId && cp.Id_Producto == cp.Producto.ProductoId)
+                        precioTotal += cp.Cantidad * cp.Producto.Precio;
 
-                    foreach (Carro_productos cp in carro.Carro_productos)
-                        if (cp.Id_Carro == carro.CarroId && cp.Id_Producto == prod.ProductoId)
-                            precioTotal += cp.Cantidad * prod.Precio;
-                }
 
                 precioTotal = MercadoHelper.CalcularPorcentaje(precioTotal, IVA);
                 Compra compra = new Compra(usuario.UsuarioId, precioTotal);
@@ -204,23 +185,23 @@ namespace WebComercio.Controllers
                 {
                     try
                     {
-                        foreach (Producto prod in carro.ProductosCompra)
+                        foreach (Carro_productos cp in carrito.Carro_productos)
                         {
-
-                            compra.CompraProducto.Add(prod);
-
+                            compra.CompraProducto.Add(cp.Producto);
                             _context.compras.Update(compra);
                             _context.SaveChanges();
-                            foreach (Carro_productos cp in carro.Carro_productos)
-                            {
-                                if (cp.Id_Carro == carro.CarroId && cp.Id_Producto == prod.ProductoId)
-                                    compra.Productos_compra.Last<Productos_compra>().Cantidad_producto = cp.Cantidad;
-                                ActualizarStockProducto(cp.Id_Producto, cp.Cantidad);
-                                _context.compras.Update(compra);
-                                _context.SaveChanges();
-                            }
-
+                            if (cp.Id_Carro == carrito.CarroId && cp.Id_Producto == cp.Producto.ProductoId)
+                                compra.Productos_compra.Last<Productos_compra>().Cantidad_producto = cp.Cantidad;
+                            ActualizarStockProducto(cp.Id_Producto, cp.Cantidad);
+                            _context.compras.Update(compra);
+                            _context.SaveChanges();
                         }
+
+
+                        var carroABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == usuario.UsuarioId);
+                        _context.Carro_productos.RemoveRange(carroABorrar);
+                        _context.SaveChanges();
+
                     }
                     catch (Exception)
                     {
@@ -237,14 +218,14 @@ namespace WebComercio.Controllers
             }
             catch (Exception)
             {
-                sePudoComprar = false;
+                return RedirectToAction("Index", "Mercado", new { mensaje = "Hubo un problema al procesar tu compra", identificador = identificador });
             }
-            
 
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Index", "Mercado", new { identificador = identificador });
         }
 
-        public  async Task<IActionResult> Carro(int id, int identificador)
+        public async Task<IActionResult> Carro(int id, int identificador)
         {
             ViewBag.identificador = identificador;
             var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
@@ -258,54 +239,18 @@ namespace WebComercio.Controllers
             if (ModelState.IsValid)
             {
 
-
-                //Usuario usuarioEncontrado = db.usuarios.Where(u => u.UsuarioId == Id_Usuario).FirstOrDefault();
-                //Producto productoEncontrado = db.productos.Where(p => p.ProductoId == Id_Producto).FirstOrDefault();
-
-                //if (MercadoHelper.SonMenoresACero(new List<int> { Id_Producto, Cantidad, Id_Usuario }))
-                //{
-                //    sePudoAgregar = false;
-                //    throw new Excepciones("Los parametros numericos deben ser mayor a 0");
-
-                //}
-                //else if (Cantidad > productoEncontrado.Cantidad)
-                //{
-                //    sePudoAgregar = false;
-                //    throw new Excepciones("La cantidad que se quiere agregar es mayor al stock disponible.");
-                //}
-                //else
-                //{
-                //    Carro cart = usuarioEncontrado.Carro;
-                //    cart.ProductosCompra.Add(productoEncontrado);
-                //    db.carro.Update(cart);
-                //    db.SaveChanges();
-                //    cart.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
-                //    db.carro.Update(cart);
-                //    db.SaveChanges();
-                //    sePudoAgregar = true;
-                //}
-
-
-
-
-
-                /*int usuarioID = identificador;*/
-
                 Usuario usuarioEncontrado = _context.usuarios.Include(c => c.Carro).FirstOrDefault(u => u.UsuarioId == usuarioID);
                 Producto productoEncontrado = _context.productos.Include(c => c.Carro_productos).FirstOrDefault(p => p.ProductoId == ProductoId);
-
-
                 Carro cart = usuarioEncontrado.Carro;
 
-
-                //Producto productoCarro = cart.Carro_productos.FirstOrDefault(p => p.Id_Producto == productoEncontrado.ProductoId);
                 bool estaEnCarro = false;
 
                 foreach (Producto prod in cart.ProductosCompra)
                 {
+
                     foreach (Carro_productos cp in cart.Carro_productos)
                     {
-                        if (cp.Id_Carro == cart.CarroId && cp.Id_Producto == prod.ProductoId)
+                        if (cp.Id_Carro == cart.CarroId && cp.Id_Producto == cp.Producto.ProductoId)
                         {
                             cp.Cantidad += Cantidad;
                             _context.carro.Update(cart);
@@ -314,7 +259,6 @@ namespace WebComercio.Controllers
                         }
                     }
                 }
-
 
                 if (!estaEnCarro)
                 {
@@ -327,14 +271,22 @@ namespace WebComercio.Controllers
                     _context.SaveChanges();
                 }
 
-
-
-
                 return RedirectToAction("Index", "Mercado", new { identificador = usuarioEncontrado.UsuarioId });
             }
             return RedirectToAction("Index", "Mercado", new { identificador = identificador });
         }
 
+        public IActionResult QuitarDelCarro(int? id, int identificador)
+        {
+            Usuario usuario = _context.usuarios.Where(u => u.UsuarioId == identificador).FirstOrDefault();
+            Producto productoEncontrado = _context.productos.Where(p => p.ProductoId == id).FirstOrDefault();
+            Carro carrito = usuario.Carro;
+            Carro_productos prodABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == identificador && carro.Id_Producto == id).FirstOrDefault();
+            _context.Carro_productos.Remove(prodABorrar);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Mercado", new { identificador = identificador });
+        }
 
         public async Task<IActionResult> MisDatos(int? id, int identificador)
         {
@@ -355,8 +307,9 @@ namespace WebComercio.Controllers
         }
 
 
-        public async Task<IActionResult> DetailsCompras(int id)
+        public async Task<IActionResult> DetailsCompras(int identificador, int id)
         {
+            ViewBag.Identificador = identificador;
             return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).ToListAsync());
         }
 
@@ -392,15 +345,14 @@ namespace WebComercio.Controllers
             if (usu == null)
             {
                 ViewBag.Identificador = id;
-                return RedirectToAction("EditData", "Mercado", new {mensaje="Contraseña incorrecta", identificador = id});
-                
+                return RedirectToAction("EditData", "Mercado", new { mensaje = "Contraseña incorrecta", identificador = id });
+
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-
                     usu.Cuil = Cuil;
                     usu.Nombre = Nombre;
                     usu.Apellido = Apellido;
@@ -430,13 +382,10 @@ namespace WebComercio.Controllers
             }
             return View(usu);
         }
-       
 
         private bool UsuarioExists(int id)
         {
             return _context.usuarios.Any(e => e.UsuarioId == id);
         }
-
-
     }
 }

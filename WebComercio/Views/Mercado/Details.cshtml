@@ -2,11 +2,16 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
 
 <h1>Details</h1>
-
+<div>
+    <form method="get" asp-action="Index">
+        <input type="submit" value="Volver" class="btn btn-primary" />
+        <input hidden name="identificador" value="@ViewBag.identificador" />
+    </form>
+</div>
 <div>
     <h4>Producto</h4>
     <hr />
@@ -52,12 +57,10 @@
     </form>
 
 
-
-
 </div>
 <div>
-    <form method="get" asp-action="Index">
-        <input type="submit" value="Volver" class="btn btn-primary" />
+    <form method="get" asp-action="Carro">
+        <a class="btn btn-primary" href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador">Ir al Carro</a>
         <input hidden name="identificador" value="@ViewBag.identificador" />
     </form>
 </div>

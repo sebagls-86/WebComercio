@@ -11,7 +11,7 @@
     <h1>Mercado del orto</h1>
     <div class="d-flex">
         <p>
-            <img src="~/IMG/compras/compras.png" alt="compras" width="53" height="53" alt="administracion">
+            <a href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador"><img src="~/IMG/compras/compras.png" alt="compras" width="53" height="53" ></a>
         </p>@ViewBag.productosEnCarro</p>
     </div>
 </div>
@@ -19,8 +19,10 @@
     @ViewBag.Mensaje
 </div>
 
+
 <div class="d-flex flex-row">
     <form asp-controller="Mercado" asp-action="Index" method="get">
+        <input type="hidden" name="identificador" value="@ViewBag.identificador" />
         <p>
             Nombre del producto <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
 
@@ -30,22 +32,22 @@
 
             <div>
                 <input type="radio" id="contactChoice1"
-                       name="orderByName" value="@ViewData["ByName"]">
+                       name="orderByName" value="1">
                 <label for="contactChoice1">Nombre ascendente</label>
 
                 <input type="radio" id="contactChoice2"
-                       name="orderByNameDesc" value="@ViewData["ByName"]">
+                       name="orderByName" value="-1">
                 <label for="contactChoice2">Nombre descendente</label>
             </div>
         </fieldset>
         <fieldset>
             <div>
                 <input type="radio" id="contactChoice1"
-                       name="orderByPrice" value="@ViewData["ByPrice"]">
+                       name="orderByPrice" value="1">
                 <label for="contactChoice1">Precio ascendente</label>
 
                 <input type="radio" id="contactChoice2"
-                       name="orderByPriceDesc" value="@ViewData["ByPrice"]">
+                       name="orderByPrice" value="-1">
                 <label for="contactChoice2">Precio descendente</label>
             </div>
         </fieldset>
@@ -69,7 +71,7 @@
                     }
                 }
             </select>
-
+            <input type="hidden" name="identificador" value="@ViewBag.identificador" />
             <input type="submit" value="Filtrar por Categoria" class="btn btn-primary" />
         </p>
 
@@ -82,16 +84,16 @@
         <thead>
             <tr>
                 <th>
-                    @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm })
+                    @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, identificador = ViewBag.identificador })
                 </th>
                 <th>
-                    @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm })
+                    @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm, identificador = ViewBag.identificador })
                 </th>
                 <th>
-                    @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm })
+                    @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm, identificador = ViewBag.identificador })
                 </th>
                 <th>
-                    @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm })
+                    @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm, identificador = ViewBag.identificador })
                 </th>
                 <th></th>
             </tr>
