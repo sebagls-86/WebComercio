@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebComercio.Data;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace WebComercio.Controllers
 {
@@ -23,7 +25,7 @@ namespace WebComercio.Controllers
 
             return View();
         }
-        public async Task<IActionResult> Registrado([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
+        public IActionResult Registrado([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -41,9 +43,11 @@ namespace WebComercio.Controllers
 
                         Carro carro = new Carro();
 
+                        usuario.Password = Encrypt.GetSHA256(usuario.Password);
+
                         _context.Add(usuario);
                         _context.Add(carro);
-                        await _context.SaveChangesAsync();
+                        _context.SaveChanges();
 
                         Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
                         usuario.MiCarro = lastCarro.CarroId;
@@ -51,7 +55,7 @@ namespace WebComercio.Controllers
                         carro.UsuarioId = lasUsuario.UsuarioId;
                         _context.usuarios.Update(usuario);
                         _context.carro.Update(carro);
-                        await _context.SaveChangesAsync();
+                        _context.SaveChanges();
 
                         return RedirectToAction("Index", "Login", new { mensaje = "Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
                     }
@@ -63,6 +67,21 @@ namespace WebComercio.Controllers
 
             }
             return View(usuario);
+        }
+
+        public class Encrypt
+        {
+            public static string GetSHA256(string str)
+            {
+                SHA256 sha256 = SHA256Managed.Create();
+                ASCIIEncoding encoding = new ASCIIEncoding();
+                byte[] stream = null;
+                StringBuilder sb = new StringBuilder();
+                stream = sha256.ComputeHash(encoding.GetBytes(str));
+                for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+                return sb.ToString();
+            }
+
         }
     }
 }

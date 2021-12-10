@@ -5,12 +5,8 @@
     Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
 
-<h1>Details</h1>
 <div>
-    <form method="get" asp-action="Index">
-        <input type="submit" value="Volver" class="btn btn-primary" />
-        <input hidden name="identificador" value="@ViewBag.identificador" />
-    </form>
+    <h1> <a href="/Mercado/?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Detalles</h1>
 </div>
 <div>
     <h4>Producto</h4>

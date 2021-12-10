@@ -202,7 +202,8 @@ namespace WebComercio.Controllers
                 if (sinStock.Count() != 0 && stockCantidad.Count() != 0)
                 {
                     sePudoComprar = 5;
-                }else if (sinStock.Count() != 0)
+                }
+                else if (sinStock.Count() != 0)
                 {
                     sePudoComprar = 2;
                 }
@@ -260,9 +261,7 @@ namespace WebComercio.Controllers
                             _context.SaveChanges();
                         }
 
-                        var carroABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == usuario.UsuarioId);
-                        _context.Carro_productos.RemoveRange(carroABorrar);
-                        _context.SaveChanges();
+                        Vaciar(identificador);
 
                     }
                     catch (Exception)
@@ -296,40 +295,25 @@ namespace WebComercio.Controllers
             int usuarioID = identificador;
             if (ModelState.IsValid)
             {
-
-                Usuario usuarioEncontrado = _context.usuarios.Include(c => c.Carro).FirstOrDefault(u => u.UsuarioId == usuarioID);
                 Producto productoEncontrado = _context.productos.Include(c => c.Carro_productos).FirstOrDefault(p => p.ProductoId == ProductoId);
-                Carro cart = usuarioEncontrado.Carro;
+                Carro carrito = _context.carro.Include(c => c.Carro_productos).Include(p => p.ProductosCompra).FirstOrDefault(usuario => usuario.Usuario.UsuarioId == identificador);
+                Carro_productos carProd = _context.Carro_productos.Where(cp => cp.Id_Carro == carrito.CarroId).FirstOrDefault();
 
-                bool estaEnCarro = false;
-
-                foreach (Producto prod in cart.ProductosCompra)
+                if (carProd != null && carProd.Id_Carro == carrito.CarroId && carProd.Id_Producto == productoEncontrado.ProductoId)
                 {
-
-                    foreach (Carro_productos cp in cart.Carro_productos)
-                    {
-                        if (cp.Id_Carro == cart.CarroId && cp.Id_Producto == cp.Producto.ProductoId)
-                        {
-                            cp.Cantidad += Cantidad;
-                            _context.carro.Update(cart);
-                            _context.SaveChanges();
-                            estaEnCarro = true;
-                        }
-                    }
-                }
-
-                if (!estaEnCarro)
-                {
-                    cart.ProductosCompra.Add(productoEncontrado);
-                    _context.carro.Update(cart);
-                    _context.SaveChanges();
-
-                    cart.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
-                    _context.carro.Update(cart);
+                    carProd.Cantidad += Cantidad;
+                    _context.carro.Update(carrito);
                     _context.SaveChanges();
                 }
-
-                return RedirectToAction("Index", "Mercado", new { identificador = usuarioEncontrado.UsuarioId });
+                else
+                {
+                    carrito.ProductosCompra.Add(productoEncontrado);
+                    _context.carro.Update(carrito);
+                    _context.SaveChanges();
+                    carrito.Carro_productos.Last<Carro_productos>().Cantidad = Cantidad;
+                    _context.carro.Update(carrito);
+                    _context.SaveChanges();
+                }
             }
             return RedirectToAction("Index", "Mercado", new { identificador = identificador });
         }
@@ -343,6 +327,20 @@ namespace WebComercio.Controllers
             _context.Carro_productos.Remove(prodABorrar);
             _context.SaveChanges();
 
+            return RedirectToAction("Index", "Mercado", new { identificador = identificador });
+        }
+
+        public void Vaciar(int Id_Usuario)
+        {
+            var carroABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == Id_Usuario);
+            _context.Carro_productos.RemoveRange(carroABorrar);
+            _context.SaveChanges();
+        }
+
+        public IActionResult VaciarCarro(int identificador)
+        {
+            ViewBag.identificador = identificador;
+            Vaciar(identificador);
             return RedirectToAction("Index", "Mercado", new { identificador = identificador });
         }
 
@@ -371,7 +369,7 @@ namespace WebComercio.Controllers
         {
             ViewBag.Identificador = identificador;
             ProductosEnCarro(identificador);
-            return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).OrderBy(u=> u.Id_compra).ToListAsync());
+            return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).OrderBy(u => u.Id_compra).ToListAsync());
         }
 
         public async Task<IActionResult> EditData(int? id, string mensaje, int identificador)
@@ -403,6 +401,7 @@ namespace WebComercio.Controllers
             ViewBag.Identificador = identificador;
             ViewBag.Mensaje = mensaje;
             ProductosEnCarro(identificador);
+            Password = RegistrarController.Encrypt.GetSHA256(Password);
             Usuario usu = _context.usuarios.FirstOrDefault(m => m.UsuarioId == id && m.Password == Password);
 
             if (usu == null)
@@ -423,7 +422,7 @@ namespace WebComercio.Controllers
 
                     if (nueva1 != null)
                     {
-                        usu.Password = nueva2;
+                        usu.Password = RegistrarController.Encrypt.GetSHA256(nueva2);
                     }
 
                     _context.Update(usu);
@@ -444,6 +443,50 @@ namespace WebComercio.Controllers
                 return RedirectToAction("Index", "Mercado", new { identificador = usu.UsuarioId });
             }
             return View(usu);
+        }
+
+        public IActionResult EditarCarro(int? id, string mensaje, int identificador)
+        {
+            ViewBag.Mensaje = mensaje;
+            ProductosEnCarro(identificador);
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var producto = _context.Carro_productos.Include(p => p.Producto).Where(cp => cp.Id_Carro == identificador && cp.Id_Producto ==id).FirstOrDefault();
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return View(producto);
+        }
+
+        public IActionResult EditProductoCarro(int identificador, int Cantidad, int Id_Producto, string mensaje)
+        {
+            Carro_productos cp = _context.Carro_productos.Include(c=> c.Carro).Include(p=> p.Producto).Where(cp => cp.Id_Carro == identificador && cp.Id_Producto == Id_Producto).FirstOrDefault();
+
+            if(Cantidad > cp.Producto.Cantidad)
+            {
+                cp.Cantidad = cp.Producto.Cantidad;
+                _context.Carro_productos.Update(cp);
+            }
+            else if(Cantidad == 0)
+            {
+                _context.Carro_productos.Remove(cp);
+                _context.SaveChanges();
+            }
+            else
+            {
+                cp.Cantidad = Cantidad;
+                _context.Carro_productos.Update(cp);
+            }
+
+            _context.SaveChanges();
+            ViewBag.identificador = cp.Carro.UsuarioId;
+            return RedirectToAction("Index", "Mercado", new { identificador = identificador, mensaje= "6" });
         }
 
         private bool UsuarioExists(int id)

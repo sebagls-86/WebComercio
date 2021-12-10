@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebComercio.Data;
 
 namespace WebComercio.Controllers
@@ -37,6 +35,7 @@ namespace WebComercio.Controllers
                     {
                         if (!usuario.Bloqueado && usuario.Intentos < 3)
                         {
+                            Password = RegistrarController.Encrypt.GetSHA256(Password);
                             if (usuario.Password == Password)
                             {
                                 usuario.Intentos = 0;

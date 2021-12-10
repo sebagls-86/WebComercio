@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace WebComercio
 {
     public class Usuario : IComparable<Usuario>
     {
-
+        [Display(Name="Id de Usuario")]
         public int UsuarioId { get; set; }
         public int Cuil { get; set; }
         public string Nombre { get; set; }
@@ -14,7 +14,9 @@ namespace WebComercio
         public string Mail { get; set; }
         public string Password { get; set; }
         public Carro Carro { get; set; }
+        [Display(Name = "Id de Carro")]
         public int MiCarro { get; set; }
+        [Display(Name = "Tipo de Usuario")]
         public int TipoUsuario { get; set; }
         public int Intentos { get; set; }
         public bool Bloqueado { get; set; }
