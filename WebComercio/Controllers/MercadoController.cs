@@ -133,6 +133,7 @@ namespace WebComercio.Controllers
 
             ViewBag.identificador = identificador;
             ProductosEnCarro(identificador);
+            
             var producto = await _context.productos.Include(p => p.Cat).FirstOrDefaultAsync(m => m.ProductoId == id);
             if (producto == null)
             {
@@ -285,9 +286,12 @@ namespace WebComercio.Controllers
         {
             ViewBag.identificador = identificador;
             var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
+            
             ProductosEnCarro(identificador);
             return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
+        
+
 
         //[HttpPost]
         public IActionResult AgregarProducto(int ProductoId, int Cantidad, int identificador)
@@ -448,6 +452,7 @@ namespace WebComercio.Controllers
         public IActionResult EditarCarro(int? id, string mensaje, int identificador)
         {
             ViewBag.Mensaje = mensaje;
+            ViewBag.identificador = identificador;
             ProductosEnCarro(identificador);
 
             if (id == null)

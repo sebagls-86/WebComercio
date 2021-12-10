@@ -8,6 +8,28 @@
 <div>
     <h1> <a href="/Mercado/?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Mi Carro</h1>
 </div>
+@if (ViewBag.mensaje != null)
+{
+
+    if (ViewBag.tipoMensaje == "error")
+    {
+        <div class='alert alert-success alert-dismissable' id='alert'>
+            <button type='button' class='close' data-dismiss='alert'>×</button>
+            <strong>@ViewBag.mensaje</strong>
+        </div>
+    }
+    if (ViewBag.tipoMensaje == "success")
+    {
+        <div class='alert alert-success alert-dismissable' id='alert'>
+            <button type='button' class='close' data-dismiss='alert'>×</button>
+            <strong>@ViewBag.mensaje</strong>
+        </div>
+    }
+
+}
+{
+
+
 <table class="table mt-5 col-8">
     <thead>
         <tr>

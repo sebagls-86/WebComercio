@@ -71,6 +71,9 @@ namespace WebComercio.Controllers
                         {
                             return RedirectToAction("Index", "Login", new { mensaje = "Usuario bloqueado. Comuniquese con el administrador", identificador = 0 });
                         }
+                    } else
+                    {
+                            return RedirectToAction("Index", "Login", new { mensaje = "El usuario no existe", identificador = 0 });
                     }
                 }
                 catch (Exception)
