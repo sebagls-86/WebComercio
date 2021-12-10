@@ -7,76 +7,134 @@
 }
 
 
-<div class="d-flex justify-content-between mb-5">
-    <h1>Mercado del orto</h1>
-    <div class="d-flex">
-        <p>
-            <a href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador"><img src="~/IMG/compras/compras.png" alt="compras" width="53" height="53" ></a>
-        </p>@ViewBag.productosEnCarro</p>
+
+<div class="mb-5 my-5">
+    <h1>¡Bienvenido a nuestro Mercado!</h1>
+  
+</div>
+
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+
+            <form class="" asp-controller="Mercado" asp-action="Index" method="get">
+
+                <h5>Buscar <img src="~/IMG/mercado/buscar.png" alt="buscar" width="25" height="25" /></h5>
+                <input class="form-control" type="text" name="searchString" placeholder="Ingrese un producto" value="@ViewData["CurrentFilter"]" />
+
+                <fieldset class="my-3">
+                    <ul class="list-unstyled">
+                        <li>
+                            <input type="radio" id="contactChoice1"
+                                   name="orderByName" value="@ViewData["ByName"]">
+                            <label for="contactChoice1">A-Z</label>
+                        </li>
+                        <li>
+                            <input type="radio" id="contactChoice2"
+                                   name="orderByNameDesc" value="@ViewData["ByName"]">
+                            <label for="contactChoice2">Z-A</label>
+                        </li>
+                        <li>
+                            <input type="radio" id="contactChoice1"
+                                   name="orderByPrice" value="@ViewData["ByPrice"]">
+                            <label for="contactChoice1">↑ Precio</label>
+                        </li>
+                        <li>
+                            <input type="radio" id="contactChoice2"
+                                   name="orderByPriceDesc" value="@ViewData["ByPrice"]">
+                            <label for="contactChoice2">↓ Precio</label>
+                        </li>
+                    </ul>
+                    <input type="submit" value="Aplicar" class="btn btn-primary btn-block" />
+                </fieldset>
+
+            </form>
+            <hr />
+            <form class="" asp-controller="Mercado" asp-action="Index" method="get">
+
+
+                    <select class="form-control" name="Cat">
+                        <option selected >Categoría</option>
+                        @{
+                            foreach (var item in @ViewBag.categorias)
+                            {
+                                <option value="@item.Nombre">
+                                    @item.Nombre
+                                </option>
+                            }
+                        }
+                    </select>
+
+                    <input type="submit" value="Filtrar" class="btn btn-primary my-3 btn-block" />
+   
+
+            </form>
+        </div>
+
+        <div class="col-md-9">
+            <form method="get" asp-action="Details">
+
+                <table class="table table-striped my-2 text-center">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Agregar", "Index")
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Nombre
+                                </td>
+                                <td>
+                                    @item.Precio
+                                </td>
+                                <td>
+                                    @item.Cantidad
+                                </td>
+                                <td>
+                                    @item.Cat.Nombre
+                                </td>
+                                <td>
+                                    <a href="/Mercado/Details/@item.ProductoId?identificador=@ViewBag.identificador">
+                                        <img src="~/IMG/mercado/agregar.png" data-bs-toggle="tooltip" title="Agregar al carro" alt="agregar" width="30" height="30" />
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
 </div>
+
+<hr />
+
+
 <div class="text-success">
     @ViewBag.Mensaje
 </div>
 
-
-<div class="d-flex flex-row">
-    <form asp-controller="Mercado" asp-action="Index" method="get">
-        <input type="hidden" name="identificador" value="@ViewBag.identificador" />
-        <p>
-            Nombre del producto <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
-
-        </p>
-
-        <fieldset>
-
-            <div>
-                <input type="radio" id="contactChoice1"
-                       name="orderByName" value="1">
-                <label for="contactChoice1">Nombre ascendente</label>
-
-                <input type="radio" id="contactChoice2"
-                       name="orderByName" value="-1">
-                <label for="contactChoice2">Nombre descendente</label>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div>
-                <input type="radio" id="contactChoice1"
-                       name="orderByPrice" value="1">
-                <label for="contactChoice1">Precio ascendente</label>
-
-                <input type="radio" id="contactChoice2"
-                       name="orderByPrice" value="-1">
-                <label for="contactChoice2">Precio descendente</label>
-            </div>
-        </fieldset>
-        <div>
-            <input type="submit" value="Filtrar" class="btn btn-primary" />
-        </div>
-
-    </form>
-
-    <form asp-controller="Mercado" asp-action="Index" method="get">
-        <p>
-
-            <select name="Cat">
-                <option selected>Selecciona una opción</option>
-                @{
-                    foreach (var item in @ViewBag.categorias)
-                    {
-                        <option value="@item.Nombre">
-                            @item.Nombre
-                        </option>
-                    }
-                }
-            </select>
-            <input type="hidden" name="identificador" value="@ViewBag.identificador" />
-            <input type="submit" value="Filtrar por Categoria" class="btn btn-primary" />
-        </p>
-
-    </form>
-</div>
 
 <form method="get" asp-action="Details">
     
@@ -126,3 +184,4 @@
         </tbody>
     </table>
 </form>
+
