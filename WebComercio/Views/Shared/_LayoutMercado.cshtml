@@ -11,7 +11,7 @@
 <body>
     <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
+                <div class="container justify-content-between">
                     <a class="navbar-brand" asp-area="" asp-controller="" asp-action="">WebComercio</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -25,15 +25,28 @@
 
                         </ul>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <a class="nav-link text-dark" href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador">Mi Carro</a>
+                    <div class="justify-content-between row">
+                    <div>
+                        <a class="nav-link text-dark" href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador">
+                            <div class="row">
+                                <img src="~/IMG/compras/compras.png" data-bs-toggle="tooltip" title="Mi carrito" alt="Mi carro" width="40" height="40" />
+                                <h6> @ViewBag.productosEnCarro</h6>
+                            </div>
+                        </a>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <a class="nav-link text-dark" href="/Mercado/MisDatos/@ViewBag.identificador?identificador=@ViewBag.identificador">Mis Datos</a>
+                    
+                    <div class="pl-3">
+                        <a class="nav-link text-dark" href="/Mercado/MisCompras/@ViewBag.identificador?identificador=@ViewBag.identificador">
+                            <img src="~/IMG/mercado/misCompras.png"data-bs-toggle="tooltip" title="Mis compras" alt="compras" width="40" height="40" />
+                        </a>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <a class="nav-link text-dark" href="/Mercado/MisCompras/@ViewBag.identificador?identificador=@ViewBag.identificador" >Mis Compras</a>
+
+                    <div>
+                        <a class="nav-link text-dark" href="/Mercado/MisDatos/@ViewBag.identificador?identificador=@ViewBag.identificador">
+                            <img class="ml-2" src="~/IMG/mercado/miPerfil.png"  data-bs-toggle="tooltip" title="Mi perfil" alt="Mi Perfil" width="40" height="40">
+                        </a>
                     </div>
+                </div>
                 </div>
             </nav>
     </header>
