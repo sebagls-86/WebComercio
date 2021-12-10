@@ -7,6 +7,7 @@
 }
 
 
+
 <div class="mb-5 my-5">
     <h1>¡Bienvenido a nuestro Mercado!</h1>
   
@@ -129,6 +130,58 @@
 
 <hr />
 
+
 <div class="text-success">
     @ViewBag.Mensaje
 </div>
+
+
+<form method="get" asp-action="Details">
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, identificador = ViewBag.identificador })
+                </th>
+                <th>
+                    @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm, identificador = ViewBag.identificador })
+                </th>
+                <th>
+                    @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm, identificador = ViewBag.identificador })
+                </th>
+                <th>
+                    @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm, identificador = ViewBag.identificador })
+                </th>
+                <th></th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Nombre
+                    </td>
+                    <td>
+                        @item.Precio
+                    </td>
+                    <td>
+                        @item.Cantidad
+                    </td>
+                    <td>
+                        @item.Cat.Nombre
+                    </td>
+                    <td>
+                        <a href="/Mercado/Details/@item.ProductoId?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</form>
+
