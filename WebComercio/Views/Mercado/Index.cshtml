@@ -23,27 +23,27 @@
 
                 <h5>Buscar <img src="~/IMG/mercado/buscar.png" alt="buscar" width="25" height="25" /></h5>
                 <input class="form-control" type="text" name="searchString" placeholder="Ingrese un producto" value="@ViewData["CurrentFilter"]" />
-
+                <input type="hidden" name="identificador" value="@ViewBag.identificador" />
                 <fieldset class="my-3">
                     <ul class="list-unstyled">
                         <li>
                             <input type="radio" id="contactChoice1"
-                                   name="orderByName" value="@ViewData["ByName"]">
+                                   name="orderByName" value="1">
                             <label for="contactChoice1">A-Z</label>
                         </li>
                         <li>
                             <input type="radio" id="contactChoice2"
-                                   name="orderByNameDesc" value="@ViewData["ByName"]">
+                                   name="orderByName" value="-1">
                             <label for="contactChoice2">Z-A</label>
                         </li>
                         <li>
                             <input type="radio" id="contactChoice1"
-                                   name="orderByPrice" value="@ViewData["ByPrice"]">
+                                   name="orderByPrice" value="1">
                             <label for="contactChoice1">↑ Precio</label>
                         </li>
                         <li>
                             <input type="radio" id="contactChoice2"
-                                   name="orderByPriceDesc" value="@ViewData["ByPrice"]">
+                                   name="orderByPrice" value="-1">
                             <label for="contactChoice2">↓ Precio</label>
                         </li>
                     </ul>
@@ -55,20 +55,20 @@
             <form class="" asp-controller="Mercado" asp-action="Index" method="get">
 
 
-                    <select class="form-control" name="Cat">
-                        <option selected >Categoría</option>
-                        @{
-                            foreach (var item in @ViewBag.categorias)
-                            {
-                                <option value="@item.Nombre">
-                                    @item.Nombre
-                                </option>
-                            }
+                <select class="form-control" name="Cat">
+                    <option selected>Categoría</option>
+                    @{
+                        foreach (var item in @ViewBag.categorias)
+                        {
+                            <option value="@item.Nombre">
+                                @item.Nombre
+                            </option>
                         }
-                    </select>
+                    }
+                </select>
+                <input type="hidden" name="identificador" value="@ViewBag.identificador" />
+                <input type="submit" value="Filtrar" class="btn btn-primary my-3 btn-block" />
 
-                    <input type="submit" value="Filtrar" class="btn btn-primary my-3 btn-block" />
-   
 
             </form>
         </div>
@@ -80,19 +80,19 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm })
+                                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, identificador = ViewBag.identificador })
                             </th>
                             <th>
-                                @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm })
+                                @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm, identificador = ViewBag.identificador })
                             </th>
                             <th>
-                                @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm })
+                                @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm, identificador = ViewBag.identificador })
                             </th>
                             <th>
-                                @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm })
+                                @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm, identificador = ViewBag.identificador })
                             </th>
                             <th>
-                                @Html.ActionLink("Agregar", "Index")
+                                @Html.ActionLink("Agregar", "Index", new { identificador = ViewBag.identificador })
                             </th>
                         </tr>
 
@@ -131,57 +131,6 @@
 <hr />
 
 
-<div class="text-success">
-    @ViewBag.Mensaje
-</div>
 
 
-<form method="get" asp-action="Details">
-    
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, identificador = ViewBag.identificador })
-                </th>
-                <th>
-                    @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm, identificador = ViewBag.identificador })
-                </th>
-                <th>
-                    @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm, identificador = ViewBag.identificador })
-                </th>
-                <th>
-                    @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm, identificador = ViewBag.identificador })
-                </th>
-                <th></th>
-            </tr>
-
-        </thead>
-
-
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @item.Nombre
-                    </td>
-                    <td>
-                        @item.Precio
-                    </td>
-                    <td>
-                        @item.Cantidad
-                    </td>
-                    <td>
-                        @item.Cat.Nombre
-                    </td>
-                    <td>
-                        <a href="/Mercado/Details/@item.ProductoId?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
-</form>
 
