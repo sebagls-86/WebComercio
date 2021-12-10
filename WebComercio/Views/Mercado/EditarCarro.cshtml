@@ -1,0 +1,52 @@
+﻿@model WebComercio.Carro_productos
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container my-5">
+    <div class="row"> </div>
+    <h1> <a href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Editar</h1>
+</div>
+<div>
+    @ViewBag.identificador
+    
+</div>
+<div class="container">
+    <div class="row">
+        <div class="container">
+            <div class="col">
+                <div class="col-md-10">
+                    <form asp-action="EditProductoCarro">
+                        <input type="hidden" name="identificador" value="@Model.Id_Carro" class="form-control" />
+                        <input type="hidden" asp-for="Id_Producto" value="@Model.Id_Producto" class="form-control" />
+
+                        <div class="form-group">
+                            <label asp-for="Producto.Nombre" class="control-label"></label>
+                            <input asp-for="Producto.Nombre" class="form-control" readonly />
+                            <span asp-validation-for="Producto.Nombre" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Producto.Precio" class="control-label"></label>
+                            <input asp-for="Producto.Precio" class="form-control" readonly />
+                            <span asp-validation-for="Producto.Precio" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Cantidad" class="control-label"></label>
+                            <input asp-for="Cantidad" class="form-control" min="0" max="@Html.ValueFor(model => model.Producto.Cantidad)" required/>
+                            <span asp-validation-for="Cantidad" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Guardar" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -84,6 +84,7 @@ namespace WebComercio.Controllers
 
                             Carro carro = new Carro();
 
+                            usuario.Password = RegistrarController.Encrypt.GetSHA256(usuario.Password);
                             _context.Add(usuario);
                             _context.Add(carro);
                             await _context.SaveChangesAsync();
@@ -141,6 +142,7 @@ namespace WebComercio.Controllers
             {
                 try
                 {
+                    usuario.Password = RegistrarController.Encrypt.GetSHA256(usuario.Password);
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                 }

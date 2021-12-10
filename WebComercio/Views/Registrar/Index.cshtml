@@ -18,31 +18,31 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Cuil" class="control-label"></label>
-                <input asp-for="Cuil" class="form-control" />
+                <input asp-for="Cuil" class="form-control" required />
                 <span asp-validation-for="Cuil" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
+                <input asp-for="Nombre" class="form-control" required/>
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
+                <input asp-for="Apellido" class="form-control" required/>
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Mail" class="control-label"></label>
-                <input asp-for="Mail" class="form-control" />
+                <input asp-for="Mail" class="form-control" required/>
                 <span asp-validation-for="Mail" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" class="form-control" required/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select id=" " TipoUsuario" name="TipoUsuario" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                <select id=" " TipoUsuario" name="TipoUsuario" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
                     <option selected>Selecciona una opción</option>
                     <option value="2">Persona</option>
                     <option value="3">Empresa</option>
