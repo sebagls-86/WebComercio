@@ -10,11 +10,54 @@
 
 <div class="mb-5 my-5">
     <h1>¡Bienvenido a nuestro Mercado!</h1>
-  
+
 </div>
 
+
 <div>
-    @ViewBag.mensaje
+    @if (ViewBag.Mensaje != null)
+    {
+        if (ViewBag.Mensaje == "1")
+        {
+            <div class='alert alert-success alert-dismissable' id='alert'>
+                <button type='button' class='close' data-dismiss='alert'>×</button>
+                <strong>Tu compra se realizo con exito</strong>
+
+            </div>
+        }
+        else if (ViewBag.Mensaje == "2")
+        {
+            <div class='alert alert-danger alert-dismissable' id='alert'>
+                <button type='button' class='close' data-dismiss='alert'>×</button>
+                <strong>Hay productos sin stock y otros con menor cantidad que la solicitada. Revisá tu carro por favor</strong>
+
+            </div>
+        }
+        else if (ViewBag.Mensaje == "3")
+        {
+            <div class='alert alert-danger alert-dismissable' id='alert'>
+                <button type='button' class='close' data-dismiss='alert'>×</button>
+                <strong>Hay productos sin stock. Revisá tu carro por favor</strong>
+
+            </div>
+        }
+        else if (ViewBag.Mensaje == "4")
+        {
+            <div class='alert alert-danger alert-dismissable' id='alert'>
+                <button type='button' class='close' data-dismiss='alert'>×</button>
+                <strong>Modificamos tu cantidad de productos en el carro por falta de stock. Revisá tu carro por favor</strong>
+
+            </div>
+        }
+        else if (ViewBag.Mensaje == "5")
+        {
+            <div class='alert alert-danger alert-dismissable' id='alert'>
+                <button type='button' class='close' data-dismiss='alert'>×</button>
+                <strong>Hubo un error al procesar tu compra. Intentá de nuevo por favor</strong>
+
+            </div>
+        }
+    }
 </div>
 
 <hr />
@@ -85,15 +128,19 @@
                         <tr>
                             <th>
                                 @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, identificador = ViewBag.identificador })
+                                <img src="~/IMG/mercado/ordenar.png" alt="ordenar" width="15" height="15" />
                             </th>
                             <th>
                                 @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.PriceSortParm, identificador = ViewBag.identificador })
+                                <img src="~/IMG/mercado/ordenar.png" alt="ordenar" width="15" height="15" />
                             </th>
                             <th>
                                 @Html.ActionLink("Cantidad", "Index", new { sortOrder = ViewBag.AmountSortParm, identificador = ViewBag.identificador })
+                                <img src="~/IMG/mercado/ordenar.png" alt="ordenar" width="15" height="15" />
                             </th>
                             <th>
                                 @Html.ActionLink("Categoria", "Index", new { sortOrder = ViewBag.CategorySortParm, identificador = ViewBag.identificador })
+                                <img src="~/IMG/mercado/ordenar.png" alt="ordenar" width="15" height="15" />
                             </th>
                             <th>
                                 @Html.ActionLink("Agregar", "Index", new { identificador = ViewBag.identificador })
