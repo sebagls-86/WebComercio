@@ -25,8 +25,7 @@ namespace WebComercio.Controllers
             productosOrdenados = _context.productos.Where(producto => producto.Cantidad > 0).OrderBy(producto => producto.ProductoId).ToList();
             List<Categoria> categorias = new List<Categoria>();
             categorias = _context.categorias.ToList();
-            var productosEncarro = _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == identificador).Count();
-            ViewBag.productosEnCarro = productosEncarro;
+            ProductosEnCarro(identificador);
             ViewBag.Productos = productosOrdenados;
             ViewBag.categorias = categorias;
             ViewBag.Mensaje = mensaje;
@@ -133,7 +132,7 @@ namespace WebComercio.Controllers
         {
 
             ViewBag.identificador = identificador;
-
+            ProductosEnCarro(identificador);
             var producto = await _context.productos.Include(p => p.Cat).FirstOrDefaultAsync(m => m.ProductoId == id);
             if (producto == null)
             {
@@ -142,6 +141,11 @@ namespace WebComercio.Controllers
             return View(producto);
         }
 
+        private void ProductosEnCarro(int identificador)
+        {
+            var productosEncarro = _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == identificador).Count();
+            ViewBag.productosEnCarro = productosEncarro;
+        }
         private bool ActualizarStockProducto(int idProducto, int cantidad)
         {
             Producto productoEncontrado = _context.productos.FirstOrDefault(producto => producto.ProductoId == idProducto);
@@ -154,9 +158,11 @@ namespace WebComercio.Controllers
             }
             return false;
         }
-        public IActionResult Comprar(int identificador, string mensaje)
+        public IActionResult Comprar(int identificador, string Mensaje, string mensaje)
         {
-            ViewBag.mensaje = mensaje;
+            ViewBag.Mensaje = Mensaje;
+            ViewBag.message = mensaje;
+
             ViewBag.identificador = identificador;
 
             Double precioTotal = 0;
@@ -213,7 +219,7 @@ namespace WebComercio.Controllers
                         _context.SaveChanges();
                     }
 
-                    return RedirectToAction("Index", "Mercado", new { mensaje = "Hay productos sin stock y otros con menor cantidad que la solicitada", identificador = identificador });
+                    return RedirectToAction("Index", "Mercado", new { Mensaje = "2", identificador = identificador });
                 }
 
                 if (sePudoComprar == 2)
@@ -225,11 +231,11 @@ namespace WebComercio.Controllers
                         _context.SaveChanges();
                     }
 
-                    return RedirectToAction("Index", "Mercado", new { mensaje = "Hay productos sin stock", identificador = identificador });
+                    return RedirectToAction("Index", "Mercado", new { Mensaje = "3", identificador = identificador });
                 }
                 else if (sePudoComprar == 3)
                 {
-                    return RedirectToAction("Index", "Mercado", new { mensaje = "Modificamos tu cantidad de productos en el carro por falta de stock", identificador = identificador });
+                    return RedirectToAction("Index", "Mercado", new { Mensaje = "4", identificador = identificador });
                 }
                 else
                 {
@@ -261,17 +267,17 @@ namespace WebComercio.Controllers
                     }
                     catch (Exception)
                     {
-                        return RedirectToAction("Index", "Mercado", new { mensaje = "Hubo un problema al procesar tu compra", identificador = identificador });
+                        return RedirectToAction("Index", "Mercado", new { Mensaje = "5", identificador = identificador });
                     }
 
                 }
             }
             catch (Exception)
             {
-                return RedirectToAction("Index", "Mercado", new{mensaje = "Hubo un problema al procesar tu compra", identificador = identificador});
+                return RedirectToAction("Index", "Mercado", new { Mensaje = "5", identificador = identificador });
             }
 
-            return RedirectToAction("Index", "Mercado", new { mensaje = "Tu compra se realizó con éxito!", identificador = identificador });
+            return RedirectToAction("Index", "Mercado", new { Mensaje = "1", identificador = identificador });
 
         }
 
@@ -280,6 +286,7 @@ namespace WebComercio.Controllers
         {
             ViewBag.identificador = identificador;
             var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
+            ProductosEnCarro(identificador);
             return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
 
@@ -342,6 +349,7 @@ namespace WebComercio.Controllers
         public async Task<IActionResult> MisDatos(int? id, int identificador)
         {
             ViewBag.identificador = identificador;
+            ProductosEnCarro(identificador);
             var usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.UsuarioId == id);
             if (usuario == null)
             {
@@ -354,19 +362,22 @@ namespace WebComercio.Controllers
         public async Task<IActionResult> MisCompras(int id, int identificador)
         {
             ViewBag.identificador = identificador;
-            return View(await _context.compras.Where(u => u.idUsuario == id).ToListAsync());
+            ProductosEnCarro(identificador);
+            return View(await _context.compras.Where(u => u.idUsuario == id).OrderByDescending(u => u.CompraId).ToListAsync());
         }
 
 
         public async Task<IActionResult> DetailsCompras(int identificador, int id)
         {
             ViewBag.Identificador = identificador;
-            return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).ToListAsync());
+            ProductosEnCarro(identificador);
+            return View(await _context.productos_compra.Include(p => p.Producto).Where(u => u.Id_compra == id).OrderBy(u=> u.Id_compra).ToListAsync());
         }
 
-        public async Task<IActionResult> EditData(int? id, string mensaje)
+        public async Task<IActionResult> EditData(int? id, string mensaje, int identificador)
         {
             ViewBag.Mensaje = mensaje;
+            ProductosEnCarro(identificador);
 
             if (id == null)
             {
@@ -378,6 +389,7 @@ namespace WebComercio.Controllers
             {
                 return NotFound();
             }
+
             return View(usuario);
         }
 
@@ -390,7 +402,7 @@ namespace WebComercio.Controllers
         {
             ViewBag.Identificador = identificador;
             ViewBag.Mensaje = mensaje;
-
+            ProductosEnCarro(identificador);
             Usuario usu = _context.usuarios.FirstOrDefault(m => m.UsuarioId == id && m.Password == Password);
 
             if (usu == null)
