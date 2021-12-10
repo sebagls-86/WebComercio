@@ -1,0 +1,12 @@
+﻿@model string
+
+<h1>Sessions</h1>
+<form asp-action="SaveName" method="post">
+    Your name:
+    <input type="text" name="name" value="@Model" />
+    <input type="submit" value="Save" />
+
+    <div>
+        @Model
+    </div>
+</form>

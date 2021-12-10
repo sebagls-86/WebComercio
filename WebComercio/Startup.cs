@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebComercio.Data;
+using Microsoft.AspNetCore.Session;
 
 namespace WebComercio
 {
@@ -25,12 +26,22 @@ namespace WebComercio
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession();
+            services.AddMvc();
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddDbContext<MyContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MyContext")));
+        
+            
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,6 +56,9 @@ namespace WebComercio
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSession();
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
