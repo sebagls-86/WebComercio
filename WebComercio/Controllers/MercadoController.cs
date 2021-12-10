@@ -160,33 +160,90 @@ namespace WebComercio.Controllers
             ViewBag.identificador = identificador;
 
             Double precioTotal = 0;
-            bool sePudoComprar = false;
+
             double IVA = 21;
             Usuario usuario = _context.usuarios.Where(usuario => usuario.UsuarioId == identificador).FirstOrDefault();
             Carro carrito = _context.carro.Include(c => c.Carro_productos).Include(p => p.ProductosCompra).FirstOrDefault(usuario => usuario.Usuario.UsuarioId == identificador);
+            List<Carro_productos> sinStock = new List<Carro_productos>();
+            List<Carro_productos> stockCantidad = new List<Carro_productos>();
 
+            int sePudoComprar = 0;
 
             try
             {
-
                 foreach (Carro_productos cp in carrito.Carro_productos)
-                    if (cp.Id_Carro == carrito.CarroId && cp.Id_Producto == cp.Producto.ProductoId)
-                        precioTotal += cp.Cantidad * cp.Producto.Precio;
-
-
-                precioTotal = MercadoHelper.CalcularPorcentaje(precioTotal, IVA);
-                Compra compra = new Compra(usuario.UsuarioId, precioTotal);
-                _context.compras.Add(compra);
-                _context.SaveChanges();
-
-                sePudoComprar = true;
-
-                if (sePudoComprar)
                 {
+                    if (cp.Id_Carro == carrito.CarroId && cp.Id_Producto == cp.Producto.ProductoId)
+                    {
+                        if (cp.Producto.Cantidad <= 0)
+                        {
+                            sinStock.Add(cp);
+                        }
+                        else if (cp.Cantidad > cp.Producto.Cantidad)
+                        {
+                            stockCantidad.Add(cp);
+                            cp.Cantidad = cp.Producto.Cantidad;
+                            _context.productos.Update(cp.Producto);
+                            _context.SaveChanges();
+                        }
+                        else
+                        {
+                            precioTotal += cp.Cantidad * cp.Producto.Precio;
+                        }
+                    }
+                }
+
+                if (sinStock.Count() != 0 && stockCantidad.Count() != 0)
+                {
+                    sePudoComprar = 5;
+                }else if (sinStock.Count() != 0)
+                {
+                    sePudoComprar = 2;
+                }
+                else if (stockCantidad.Count() != 0)
+                {
+                    sePudoComprar = 3;
+                }
+                if (sePudoComprar == 5)
+                {
+
+                    foreach (Carro_productos cp in sinStock)
+                    {
+                        _context.Carro_productos.Remove(cp);
+                        _context.SaveChanges();
+                    }
+
+                    return RedirectToAction("Index", "Mercado", new { mensaje = "Hay productos sin stock y otros con menor cantidad que la solicitada", identificador = identificador });
+                }
+
+                if (sePudoComprar == 2)
+                {
+
+                    foreach (Carro_productos cp in sinStock)
+                    {
+                        _context.Carro_productos.Remove(cp);
+                        _context.SaveChanges();
+                    }
+
+                    return RedirectToAction("Index", "Mercado", new { mensaje = "Hay productos sin stock", identificador = identificador });
+                }
+                else if (sePudoComprar == 3)
+                {
+                    return RedirectToAction("Index", "Mercado", new { mensaje = "Modificamos tu cantidad de productos en el carro por falta de stock", identificador = identificador });
+                }
+                else
+                {
+                    precioTotal = MercadoHelper.CalcularPorcentaje(precioTotal, IVA);
+                    Compra compra = new Compra(usuario.UsuarioId, precioTotal);
+                    _context.compras.Add(compra);
+                    _context.SaveChanges();
+                    sePudoComprar = 1;
+
                     try
                     {
                         foreach (Carro_productos cp in carrito.Carro_productos)
                         {
+
                             compra.CompraProducto.Add(cp.Producto);
                             _context.compras.Update(compra);
                             _context.SaveChanges();
@@ -197,7 +254,6 @@ namespace WebComercio.Controllers
                             _context.SaveChanges();
                         }
 
-
                         var carroABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == usuario.UsuarioId);
                         _context.Carro_productos.RemoveRange(carroABorrar);
                         _context.SaveChanges();
@@ -205,25 +261,20 @@ namespace WebComercio.Controllers
                     }
                     catch (Exception)
                     {
-                        sePudoComprar = false;
+                        return RedirectToAction("Index", "Mercado", new { mensaje = "Hubo un problema al procesar tu compra", identificador = identificador });
                     }
-                    sePudoComprar = true;
-                }
-                else
-                {
-                    sePudoComprar = false;
-                }
 
-
+                }
             }
             catch (Exception)
             {
-                return RedirectToAction("Index", "Mercado", new { mensaje = "Hubo un problema al procesar tu compra", identificador = identificador });
+                return RedirectToAction("Index", "Mercado", new{mensaje = "Hubo un problema al procesar tu compra", identificador = identificador});
             }
 
+            return RedirectToAction("Index", "Mercado", new { mensaje = "Tu compra se realizó con éxito!", identificador = identificador });
 
-            return RedirectToAction("Index", "Mercado", new { identificador = identificador });
         }
+
 
         public async Task<IActionResult> Carro(int id, int identificador)
         {
