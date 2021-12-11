@@ -16,7 +16,7 @@
             <div class="col">
                 <div class="col-md-10">
                     <form asp-action="EditProductoCarro">
-                        <input type="hidden" name="identificador" value="@Model.Id_Carro" class="form-control" />
+                        <input type="hidden" name="identificador" value="@ViewBag.identificador" class="form-control" />
                         <input type="hidden" asp-for="Id_Producto" value="@Model.Id_Producto" class="form-control" />
 
                         <div class="form-group">

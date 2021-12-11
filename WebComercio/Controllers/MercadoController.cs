@@ -471,7 +471,7 @@ namespace WebComercio.Controllers
 
         public IActionResult EditProductoCarro(int identificador, int Cantidad, int Id_Producto, string mensaje)
         {
-            Carro_productos cp = _context.Carro_productos.Include(c=> c.Carro).Include(p=> p.Producto).Where(cp => cp.Id_Carro == identificador && cp.Id_Producto == Id_Producto).FirstOrDefault();
+            Carro_productos cp = _context.Carro_productos.Include(c=> c.Carro).Include(p=> p.Producto).Where(cp => cp.Carro.UsuarioId == identificador && cp.Id_Producto == Id_Producto).FirstOrDefault();
 
             if(Cantidad > cp.Producto.Cantidad)
             {
