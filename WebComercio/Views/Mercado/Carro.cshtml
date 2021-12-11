@@ -4,10 +4,13 @@
     ViewData["Title"] = "Carrito de Compras";
     Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
-
-<div>
-    <h1> <a href="/Mercado/?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Mi Carro</h1>
+<div class="container my-5">
+    <div class="row">
+        <h1> <a href="/Mercado/?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Mi Carro</h1>
+    </div>
 </div>
+
+
 @if (ViewBag.mensaje != null)
 {
 
@@ -27,64 +30,70 @@
     }
 
 }
-{
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped my-2 text-center">
+                <thead>
+                    <tr>
 
-<table class="table mt-5 col-8">
-    <thead>
-        <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Producto.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cantidad)
+                        </th>
+                        <th>
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
 
-            <th>
-                @Html.DisplayNameFor(model => model.Producto.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th>
-                Acciones
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cantidad)
+                        </td>
+                        <td class="row">
+                            <a href="/Mercado/Details/@item.Id_Producto?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Producto.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cantidad)
-                </td>
-                <td>
-                    <a href="/Mercado/Details/@item.Id_Producto?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
+                            <form method="get" asp-action="EditarCarro">
+                                <input type="submit" value="Modificar" class="btn btn-primary" />
+                                <input hidden name="id" value="@item.Id_Producto" />
+                                <input hidden name="identificador" value="@ViewBag.identificador" />
+                            </form>
 
-                    <form method="get" asp-action="EditarCarro">
-                        <input type="submit" value="Modificar" class="btn btn-primary" />
-                        <input hidden name="id" value="@item.Id_Producto" />
-                        <input hidden name="identificador" value="@ViewBag.identificador" />
-                    </form>
+                                <form method="get" asp-action="QuitarDelCarro">
+                                    <input type="submit" value="Quitar del carro" class="btn btn-primary" />
+                                    <input hidden name="idProducto" value="@item.Id_Producto" />
+                                    <input hidden name="identificador" value="@ViewBag.identificador" />
+                                </form>
 
-                    <form method="get" asp-action="QuitarDelCarro">
-                        <input type="submit" value="Quitar del carro" class="btn btn-primary" />
-                        <input hidden name="idProducto" value="@item.Id_Producto" />
-                        <input hidden name="identificador" value="@ViewBag.identificador" />
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
 
-</table>
-
-<div>
-    <form method="get" asp-action="Comprar">
-        <input type="submit" value="Comprar" class="btn btn-primary" />
-        <input hidden name="identificador" value="@ViewBag.identificador" />
-    </form>
-    <form method="get" asp-action="VaciarCarro">
-        <input type="submit" value="Vaciar carro" class="btn btn-primary" />
-        <input hidden name="identificador" value="@ViewBag.identificador" />
-    </form>
-
+            </table>
+        </div>
+    </div>
 </div>
+
+            <div>
+                <form method="get" asp-action="Comprar">
+                    <input type="submit" value="Comprar" class="btn btn-primary" />
+                    <input hidden name="identificador" value="@ViewBag.identificador" />
+                </form>
+
+                <form class="my-3" method="get" asp-action="VaciarCarro">
+                    <input type="submit" value="Vaciar carro" class="btn btn-secondary" />
+                    <input hidden name="identificador" value="@ViewBag.identificador" />
+                </form>
+
+            </div>
