@@ -65,10 +65,11 @@
                     <input asp-for="Password" type="password" class="form-control" required />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
+
+                <label class="control-label">Seleccione una opción</label>
                 <div class="form-group">
                     <select TipoUsuario" name="TipoUsuario" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
-                        <option selected>Selecciona una opción</option>
-                        <option value="2">Persona</option>
+                        <option selected value="2">Persona</option>
                         <option value="3">Empresa</option>
                     </select>
                 </div>
