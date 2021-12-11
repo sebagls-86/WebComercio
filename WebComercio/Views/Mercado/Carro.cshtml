@@ -60,20 +60,23 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Cantidad)
                             </td>
-                            <td class="row">
-                                <a href="/Mercado/Details/@item.Id_Producto?identificador=@ViewBag.identificador" class="btn btn-primary">Ver Producto</a>
+                            <td >
+                               <div class="d-flex justify-content-center">
 
-                                <form method="get" asp-action="EditarCarro">
+                                <a  href="/Mercado/Details/@item.Id_Producto?identificador=@ViewBag.identificador" class=" ml-5 btn btn-primary">Ver Producto</a>
+
+                                <form class="ml-4" method="get" asp-action="EditarCarro">
                                     <input type="submit" value="Modificar" class="btn btn-primary" />
                                     <input hidden name="id" value="@item.Id_Producto" />
                                     <input hidden name="identificador" value="@ViewBag.identificador" />
                                 </form>
 
-                                <form method="get" asp-action="QuitarDelCarro">
-                                    <input type="submit" value="Quitar del carro" class="btn btn-primary" />
+                                <form class="ml-4"method="get" asp-action="QuitarDelCarro">
+                                    <input type="submit" value="Quitar del carro" class="btn btn-danger" />
                                     <input hidden name="id" value="@item.Id_Producto" />
                                     <input hidden name="identificador" value="@ViewBag.identificador" />
                                 </form>
+                               </div>
 
                             </td>
                         </tr>
@@ -85,17 +88,20 @@
     </div>
 </div>
 
-<div>
+<div class="container">
     @if (ViewBag.CuentaProductos != 0)
     {
-        <form method="get" asp-action="Comprar">
-            <input type="submit" value="Comprar" class="btn btn-primary" />
-            <input hidden name="identificador" value="@ViewBag.identificador" />
-        </form>
-        <form class="my-3" method="get" asp-action="VaciarCarro">
+        <div class="d-flex mt-5">
+
+        <form  method="get" asp-action="VaciarCarro">
             <input type="submit" value="Vaciar carro" class="btn btn-secondary" />
             <input hidden name="identificador" value="@ViewBag.identificador" />
         </form>
+        <form class="ml-4" method="get" asp-action="Comprar">
+            <input type="submit" value="Comprar" class="btn btn-primary" />
+            <input hidden name="identificador" value="@ViewBag.identificador" />
+        </form>
+        </div>
     
     }
 
