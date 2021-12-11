@@ -14,6 +14,15 @@ namespace WebComercio.Controllers
     {
         private readonly MyContext _context;
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public ComprasController(MyContext context)
         {
             _context = context;

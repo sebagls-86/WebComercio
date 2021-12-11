@@ -17,6 +17,15 @@ namespace WebComercio.Controllers
             _context = context;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
 
         public async Task<IActionResult> Index(string mensaje, int identificador, string searchString, string orderByName, string orderByPrice, string Cat, string sortOrder)
 

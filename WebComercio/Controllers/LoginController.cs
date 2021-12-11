@@ -10,6 +10,15 @@ namespace WebComercio.Controllers
 
         private readonly MyContext _context;
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public LoginController(MyContext context)
         {
             _context = context;
