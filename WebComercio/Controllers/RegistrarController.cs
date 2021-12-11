@@ -65,12 +65,15 @@ namespace WebComercio.Controllers
                         _context.usuarios.Update(usuario);
                         _context.carro.Update(carro);
                         _context.SaveChanges();
-
-                        return RedirectToAction("Index", "Login", new { mensaje = "Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
+                        TempData["Mensaje"] = "Se ha creado el usuario " + usuario.Nombre + " exitosamente.";
+                        TempData["TipoMensaje"] = 2;
+                        return RedirectToAction("Index", "Login");
                     }
                 }
                 catch (Exception)
                 {
+                    TempData["Mensaje"] = "Error al crear usuario.";
+                    TempData["TipoMensaje"] = 1;
                     return RedirectToAction("Index", "Registrar", new { mensaje = "Error", identificador = 1 });
                 }
 

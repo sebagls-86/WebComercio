@@ -13,12 +13,30 @@
     </h1>
 </div>
 
+@if (TempData["TipoMensaje"] != null)
+{
+    @if ((int)TempData["TipoMensaje"] == 1)
+    {
+        <div class='alert alert-danger alert-dismissable' id='alert'>
+            <button type='button' class='close' data-dismiss='alert'>×</button>
+            <strong>@TempData["Mensaje"]</strong>
+
+        </div>
+    }
+
+    @if ((int)TempData["TipoMensaje"] == 2)
+    {
+        <div class='alert alert-success alert-dismissable' id='alert'>
+            <button type='button' class='close' data-dismiss='alert'>×</button>
+            <strong>@TempData["Mensaje"]</strong>
+        </div>
+    }
+
+}
+
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <div class="text-danger">
-                @ViewBag.Mensaje
-            </div>
             <form asp-action="Registrado">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -44,7 +62,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password"  type="password" class="form-control" required />
+                    <input asp-for="Password" type="password" class="form-control" required />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
