@@ -286,7 +286,7 @@ namespace WebComercio.Controllers
         {
             ViewBag.identificador = identificador;
             var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
-            
+            ViewBag.CuentaProductos = producto.Count();
             ProductosEnCarro(identificador);
             return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
