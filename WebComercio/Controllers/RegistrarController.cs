@@ -45,6 +45,8 @@ namespace WebComercio.Controllers
 
                     if (usu != null)
                     {
+                        TempData["Mensaje"] = "El CUIL " + usu.Cuil + " ya se encuentra registrado";
+                        TempData["TipoMensaje"] = 1;
                         return RedirectToAction("Index", "Registrar", new { mensaje = "CUIL ya registrado", identificador = 1 });
                     }
                     else
@@ -65,16 +67,14 @@ namespace WebComercio.Controllers
                         _context.usuarios.Update(usuario);
                         _context.carro.Update(carro);
                         _context.SaveChanges();
-                        TempData["Mensaje"] = "Se ha creado el usuario " + usuario.Nombre + " exitosamente.";
-                        TempData["TipoMensaje"] = 2;
-                        return RedirectToAction("Index", "Login");
+                        return RedirectToAction("Index", "Login", new { Mensaje = "Se ha creado el usuario " + usuario.Cuil + " exitosamente." });
                     }
                 }
                 catch (Exception)
                 {
                     TempData["Mensaje"] = "Error al crear usuario.";
                     TempData["TipoMensaje"] = 1;
-                    return RedirectToAction("Index", "Registrar", new { mensaje = "Error", identificador = 1 });
+                    return RedirectToAction("Index", "Registrar", new { mensaje = "Error al crear usuario.", identificador = 1 });
                 }
 
             }
