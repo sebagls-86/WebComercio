@@ -48,7 +48,7 @@ namespace WebComercio.Controllers
                                 }
                                 else
                                 {
-                                    return RedirectToAction("Index", "Mercado", new { identificador = usuario.Cuil });
+                                    return RedirectToAction("Index", "Mercado", new { identificador = usuario.UsuarioId});
                                 }
                             }
                             else
