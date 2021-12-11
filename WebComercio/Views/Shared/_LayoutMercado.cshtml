@@ -18,28 +18,35 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="justify-content-between row">
-                    <div>
-                        <a class="nav-link text-dark" href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador">
-                            <div class="row">
-                                <img src="~/IMG/compras/compras.png" data-bs-toggle="tooltip" title="Mi carrito" alt="Mi carro" width="40" height="40" />
-                                <h6> @ViewBag.productosEnCarro</h6>
-                            </div>
-                        </a>
-                    </div>
-                    
-                    <div class="pl-3">
-                        <a class="nav-link text-dark" href="/Mercado/MisCompras/@ViewBag.identificador?identificador=@ViewBag.identificador">
-                            <img src="~/IMG/mercado/misCompras.png"data-bs-toggle="tooltip" title="Mis compras" alt="compras" width="40" height="40" />
-                        </a>
-                    </div>
+                        <div>
+                            <a class="nav-link text-dark" href="/Mercado/Carro/@ViewBag.identificador?identificador=@ViewBag.identificador">
+                                <div class="row">
+                                    <img src="~/IMG/compras/compras.png" data-bs-toggle="tooltip" title="Mi carrito" alt="Mi carro" width="40" height="40" />
+                                    <h6> @ViewBag.productosEnCarro</h6>
+                                </div>
+                            </a>
+                        </div>
 
-                    <div>
-                        <a class="nav-link text-dark" href="/Mercado/MisDatos/@ViewBag.identificador?identificador=@ViewBag.identificador">
-                            <img class="ml-2" src="~/IMG/mercado/miPerfil.png"  data-bs-toggle="tooltip" title="Mi perfil" alt="Mi Perfil" width="40" height="40">
-                        </a>
+                        <div class="pl-3">
+                            <a class="nav-link text-dark" href="/Mercado/MisCompras/@ViewBag.identificador?identificador=@ViewBag.identificador">
+                                <img src="~/IMG/mercado/misCompras.png" data-bs-toggle="tooltip" title="Mis compras" alt="compras" width="40" height="40" />
+                            </a>
+                        </div>
+
+                        <div>
+                            <a class="nav-link text-dark" href="/Mercado/MisDatos/@ViewBag.identificador?identificador=@ViewBag.identificador">
+                                <img class="ml-2" src="~/IMG/mercado/miPerfil.png" data-bs-toggle="tooltip" title="Mi perfil" alt="Mi Perfil" width="40" height="40">
+                            </a>
+                        </div>
+                        <div>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">
+                                <img class="ml-2" src="~/IMG/usuarios/logOut.png" data-bs-toggle="tooltip" title="Salir" alt="Salir" width="40" height="40">
+                            </a>
+                        </div>
+                        
                     </div>
                 </div>
-                </div>
+                    
             </nav>
     </header>
     <div class="container">

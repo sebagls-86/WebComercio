@@ -4,13 +4,14 @@
     ViewData["Title"] = "Mis Datos";
     Layout = "~/Views/Shared/_LayoutMercado.cshtml";
 }
-
-<div class="container my-5">
-    <div class="row"> </div>
-    <h1> <a href="/Mercado/?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Detalles</h1>
+<div class="container"
+    <div class="container my-5">
+        <div class="row"> </div>
+        <h1> <a href="/Mercado/?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Mis Datos</h1>
+    </div>
 </div>
 
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="container">
             <div class="col">
@@ -40,14 +41,16 @@
                         @Html.DisplayFor(model => model.Mail)
                     </dd>
                     
+                    <div class="text-right col-md-6 pr-5 mt-3">
+                        <a href="/Mercado/EditData/@Model.UsuarioId?identificador=@ViewBag.identificador"> <img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Ver detalle"> Editar Datos</a>
+                    </div>
                 </dl>
             </div>
         </div>
     </div>
 </div>
 
-<div><a class="navbar-brand" asp-area="" asp-controller="" asp-action="">Cerrar Sesion</a></div>
 
-<div class="text-right col-md-6">
-    <a href="/Mercado/EditData/@Model.UsuarioId?identificador=@ViewBag.identificador"> <img src="~/IMG/usuarios/editar.png" data-bs-toggle="tooltip" title="Ver detalle"></a>
-</div>
+       
+    
+
