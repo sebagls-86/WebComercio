@@ -13,13 +13,11 @@
 
     <div class="row">
 
-        <div class="col -md-4">
-            <img src="~/IMG/compras/compras.png" class="card-img-top" alt="compras">
-            <div class="card my-2" style="width: 15rem;">
-                
-                <h1> 
-                <a href="/Mercado/MisCompras/@ViewBag.identificador?identificador=@ViewBag.identificador">
-                <img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a> Detalles de la compra</h1>
+        <div class="">
+            
+            <div class=" mt-4 mb-3 d-flex">
+                <h2> 
+                <a href="/Mercado/MisCompras/@ViewBag.identificador?identificador=@ViewBag.identificador"><img src="~/IMG/usuarios/volver.png" data-bs-toggle="tooltip" title="Pagina anterior"></a>Detalles de la compra</h2>
                 
             </div>
 
@@ -30,23 +28,23 @@
 <div class="container">
     <div class="row">
         <div class="col -md-12">
-            <table class="table  my-2 text-center">
+            <table class="table table-striped my-2 text-center">
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Id_compra)
+                            Compra
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Id_producto)
+                            Id Producto
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Cantidad_producto)
+                            Cantidad Producto
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Producto.Nombre)
+                            Nombre
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Producto.Precio)
+                            Precio
                         </th>
                     </tr>
                 </thead>

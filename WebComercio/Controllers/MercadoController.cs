@@ -286,7 +286,7 @@ namespace WebComercio.Controllers
         {
             ViewBag.identificador = identificador;
             var producto = await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync();
-            
+            ViewBag.CuentaProductos = producto.Count();
             ProductosEnCarro(identificador);
             return View(await _context.Carro_productos.Include(p => p.Producto).Where(m => m.Carro.UsuarioId == id).ToListAsync());
         }
@@ -324,10 +324,10 @@ namespace WebComercio.Controllers
 
         public IActionResult QuitarDelCarro(int? id, int identificador)
         {
-            Usuario usuario = _context.usuarios.Where(u => u.UsuarioId == identificador).FirstOrDefault();
+            Usuario usuario = _context.usuarios.Where(u => u.UsuarioId == identificador).Include(c => c.Carro).FirstOrDefault();
             Producto productoEncontrado = _context.productos.Where(p => p.ProductoId == id).FirstOrDefault();
             Carro carrito = usuario.Carro;
-            Carro_productos prodABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == identificador && carro.Id_Producto == id).FirstOrDefault();
+            Carro_productos prodABorrar = _context.Carro_productos.Where(carro => carro.Carro.UsuarioId == identificador && carro.Id_Producto == id).FirstOrDefault();
             _context.Carro_productos.Remove(prodABorrar);
             _context.SaveChanges();
 
@@ -336,7 +336,7 @@ namespace WebComercio.Controllers
 
         public void Vaciar(int Id_Usuario)
         {
-            var carroABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == Id_Usuario);
+            var carroABorrar = _context.Carro_productos.Where(carro => carro.Carro.UsuarioId == Id_Usuario);
             _context.Carro_productos.RemoveRange(carroABorrar);
             _context.SaveChanges();
         }
@@ -460,7 +460,7 @@ namespace WebComercio.Controllers
                 return NotFound();
             }
 
-            var producto = _context.Carro_productos.Include(p => p.Producto).Where(cp => cp.Id_Carro == identificador && cp.Id_Producto ==id).FirstOrDefault();
+            var producto = _context.Carro_productos.Include(p => p.Producto).Where(cp => cp.Carro.UsuarioId == identificador && cp.Id_Producto ==id).FirstOrDefault();
             if (producto == null)
             {
                 return NotFound();
