@@ -27,7 +27,7 @@ namespace WebComercio.Controllers
 
 
 
-            if(!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 usuarios = usuarios.Where(u => u.Nombre.Contains(searchString));
             }
@@ -65,30 +65,27 @@ namespace WebComercio.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Create(string mensaje,[Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
+        public IActionResult Create([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
         {
-            ViewBag.mensaje = mensaje;
             {
                 if (ModelState.IsValid)
                 {
-
                     try
                     {
                         Usuario usu = _context.usuarios.Where(u => u.Cuil == usuario.Cuil).FirstOrDefault();
 
                         if (usu != null)
                         {
-                            return RedirectToAction("Create", "Usuarios", new { mensaje = "3", identificador = 1 });
+                            return RedirectToAction("Create", "Usuarios", new { registro = "CUIL ya registrado"});
                         }
                         else
                         {
-
                             Carro carro = new Carro();
 
                             usuario.Password = RegistrarController.Encrypt.GetSHA256(usuario.Password);
                             _context.Add(usuario);
                             _context.Add(carro);
-                            await _context.SaveChangesAsync();
+                            _context.SaveChanges();
 
                             Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
                             usuario.MiCarro = lastCarro.CarroId;
@@ -96,19 +93,16 @@ namespace WebComercio.Controllers
                             carro.UsuarioId = lasUsuario.UsuarioId;
                             _context.usuarios.Update(usuario);
                             _context.carro.Update(carro);
-                            await _context.SaveChangesAsync();
+                            _context.SaveChanges();
 
-                            return RedirectToAction("Create", "Usuarios", new { mensaje = "1"});
+                            return RedirectToAction("Create", "Usuarios", new { registro = "Usuario correctamente registrado!"});
                         }
                     }
                     catch (Exception)
                     {
-                        return RedirectToAction("Create", "Usuarios", new { mensaje = "2"});
+                        return RedirectToAction("Create", "Usuarios", new { registro = "Error al realizar el registro. Intente nuevamente"});
                     }
-
                 }
-
-                
                 return View(usuario);
             }
         }
