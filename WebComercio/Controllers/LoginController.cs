@@ -23,7 +23,7 @@ namespace WebComercio.Controllers
         }
 
 
-        public IActionResult Login(int Cuil, string Password)
+        public IActionResult Login(long Cuil, string Password)
         {
             if (ModelState.IsValid)
             {

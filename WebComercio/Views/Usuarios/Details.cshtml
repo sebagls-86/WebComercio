@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container my-5">
@@ -37,12 +38,6 @@
                     </dt>
                     <dd class="col-sm-8">
                         @Html.DisplayFor(model => model.Mail)
-                    </dd>
-                    <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.Password)
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.Password)
                     </dd>
                     <dt class="col-sm-4">
                         @Html.DisplayNameFor(model => model.MiCarro)

@@ -8,7 +8,7 @@ namespace WebComercio
     {
         [Display(Name="Id de Usuario")]
         public int UsuarioId { get; set; }
-        public int Cuil { get; set; }
+        public long Cuil { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Mail { get; set; }
@@ -23,7 +23,7 @@ namespace WebComercio
         public List<Compra> Compra { get; set; }
 
 
-        public Usuario(int cuil, string nombre, string apellido, string mail, string password, int MiCarro, int tipoUsuario)
+        public Usuario(long cuil, string nombre, string apellido, string mail, string password, int MiCarro, int tipoUsuario)
         {
             Carro = new Carro();
             Cuil = cuil;

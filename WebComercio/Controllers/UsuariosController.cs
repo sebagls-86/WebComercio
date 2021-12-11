@@ -65,8 +65,9 @@ namespace WebComercio.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Create([Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
+        public async Task<IActionResult> Create(string mensaje,[Bind("UsuarioId,Cuil,Nombre,Apellido,Mail,Password,TipoUsuario")] Usuario usuario)
         {
+            ViewBag.mensaje = mensaje;
             {
                 if (ModelState.IsValid)
                 {
@@ -77,7 +78,7 @@ namespace WebComercio.Controllers
 
                         if (usu != null)
                         {
-                            return RedirectToAction("Index", "Registrar", new { mensaje = "CUIL ya registrado", identificador = 1 });
+                            return RedirectToAction("Create", "Usuarios", new { mensaje = "3", identificador = 1 });
                         }
                         else
                         {
@@ -97,15 +98,17 @@ namespace WebComercio.Controllers
                             _context.carro.Update(carro);
                             await _context.SaveChangesAsync();
 
-                            return RedirectToAction("Index", "Login", new { mensaje = "Usuario correctamente registrado! \n Ya podes iniciar sesión", identificador = 2 });
+                            return RedirectToAction("Create", "Usuarios", new { mensaje = "1"});
                         }
                     }
                     catch (Exception)
                     {
-                        return RedirectToAction("Index", "Registrar", new { mensaje = "Error", identificador = 1 });
+                        return RedirectToAction("Create", "Usuarios", new { mensaje = "2"});
                     }
 
                 }
+
+                
                 return View(usuario);
             }
         }
