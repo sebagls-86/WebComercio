@@ -76,7 +76,7 @@ namespace WebComercio.Controllers
 
                         if (usu != null)
                         {
-                            return RedirectToAction("Create", "Usuarios", new { registro = "CUIL ya registrado"});
+                            return RedirectToAction("Create", "Usuarios", new { registro = "CUIL ya registrado" });
                         }
                         else
                         {
@@ -95,12 +95,12 @@ namespace WebComercio.Controllers
                             _context.carro.Update(carro);
                             _context.SaveChanges();
 
-                            return RedirectToAction("Create", "Usuarios", new { registro = "Usuario correctamente registrado!"});
+                            return RedirectToAction("Create", "Usuarios", new { registro = "Usuario correctamente registrado!" });
                         }
                     }
                     catch (Exception)
                     {
-                        return RedirectToAction("Create", "Usuarios", new { registro = "Error al realizar el registro. Intente nuevamente"});
+                        return RedirectToAction("Create", "Usuarios", new { registro = "Error al realizar el registro. Intente nuevamente" });
                     }
                 }
                 return View(usuario);
@@ -110,6 +110,7 @@ namespace WebComercio.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -121,6 +122,8 @@ namespace WebComercio.Controllers
                 return NotFound();
             }
             return View(usuario);
+
+
         }
 
         // POST: Usuarios/Edit/5
@@ -143,7 +146,7 @@ namespace WebComercio.Controllers
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
                     if (!UsuarioExists(usuario.UsuarioId))
                     {
@@ -151,7 +154,8 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-                        throw;
+                        ViewBag.Error = "Error";
+                        return RedirectToAction("Index", "Usuarios");
                     }
                 }
                 return RedirectToAction(nameof(Index));
