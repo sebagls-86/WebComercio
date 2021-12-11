@@ -85,7 +85,9 @@ namespace WebComercio.Controllers
 
                         if (usu != null)
                         {
-                            return RedirectToAction("Create", "Usuarios", new { registro = "CUIL ya registrado" });
+                            TempData["Mensaje"] = "Un usuario con CUIL " + usuario.Cuil+ " ya existe.";
+                            TempData["TipoMensaje"] = 1;
+                            return RedirectToAction("Create", "Usuarios");
                         }
                         else
                         {
@@ -103,13 +105,16 @@ namespace WebComercio.Controllers
                             _context.usuarios.Update(usuario);
                             _context.carro.Update(carro);
                             _context.SaveChanges();
-
-                            return RedirectToAction("Create", "Usuarios", new { registro = "Usuario correctamente registrado!" });
+                            TempData["Mensaje"] = "Se ha creado el usuario " + usuario.Nombre + " exitosamente.";
+                            TempData["TipoMensaje"] = 2;
+                            return RedirectToAction("Create", "Usuarios");
                         }
                     }
                     catch (Exception)
                     {
-                        return RedirectToAction("Create", "Usuarios", new { registro = "Error al realizar el registro. Intente nuevamente" });
+                        TempData["Mensaje"] = "Ha ocurrido un error al crear el usuario.";
+                        TempData["TipoMensaje"] = 1;
+                        return RedirectToAction("Create", "Usuarios");
                     }
                 }
                 return View(usuario);
@@ -163,10 +168,13 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-                        ViewBag.Error = "Error";
+                        TempData["Mensaje"] = "No se ha podido editar el usuario.";
+                        TempData["TipoMensaje"] = 1;
                         return RedirectToAction("Index", "Usuarios");
                     }
                 }
+                TempData["Mensaje"] = "Se ha editado el usuario " + usuario.Nombre + " exitosamente.";
+                TempData["TipoMensaje"] = 2;
                 return RedirectToAction(nameof(Index));
             }
             return View(usuario);

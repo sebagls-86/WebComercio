@@ -65,13 +65,27 @@ namespace WebComercio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CatId,Nombre")] Categoria categoria)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(categoria);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    TempData["Mensaje"] = "Se ha creado la categoria con éxito";
+                    TempData["TipoMensaje"] = 2;
+                    _context.Add(categoria);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    TempData["Mensaje"] = "Ha ocurrido un error al crear la cateogoria.";
+                    TempData["TipoMensaje"] = 1;
+                    return RedirectToAction("Index", "Categorias");
+
+                }
             }
-            return View(categoria);
+           
+            return RedirectToAction("Index", "Categorias");
         }
 
         // GET: Categorias/Edit/5
@@ -109,7 +123,7 @@ namespace WebComercio.Controllers
                     _context.Update(categoria);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
                     if (!CategoriaExists(categoria.CatId))
                     {
@@ -117,9 +131,13 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Mensaje"] = "Ha ocurrido un error al editar la categoria.";
+                        TempData["TipoMensaje"] = 1;
+                        return RedirectToAction("Index", "Categorias");
                     }
                 }
+                TempData["Mensaje"] = "Se ha editado la categoria exitosamente.";
+                TempData["TipoMensaje"] = 2;
                 return RedirectToAction(nameof(Index));
             }
             return View(categoria);

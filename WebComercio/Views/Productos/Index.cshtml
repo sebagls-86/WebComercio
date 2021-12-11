@@ -11,6 +11,27 @@
     </div>
 </div>
 
+@if (TempData["TipoMensaje"] != null)
+{
+    @if ((int)TempData["TipoMensaje"] == 1)
+    {
+        <div class='alert alert-danger alert-dismissable' id='alert'>
+            <button type='button' class='close' data-dismiss='alert'>×</button>
+            <strong>@TempData["Mensaje"]</strong>
+
+        </div>
+    }
+
+    @if ((int)TempData["TipoMensaje"] == 2)
+    {
+        <div class='alert alert-success alert-dismissable' id='alert'>
+            <button type='button' class='close' data-dismiss='alert'>×</button>
+            <strong>@TempData["Mensaje"]</strong>
+        </div>
+    }
+
+}
+
 <div class="container my-5">
     <div class="row">
 

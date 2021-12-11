@@ -68,12 +68,26 @@ namespace WebComercio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductoId,Nombre,Precio,Cantidad,CatId")] Producto producto)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(producto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    TempData["Mensaje"] = "El producto se ha creado con éxito";
+                    TempData["TipoMensaje"] = 2;
+                    _context.Add(producto);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception)
+                {
+                    TempData["Mensaje"] = "Ha ocurrido un error al crear el producto.";
+                    TempData["TipoMensaje"] = 1;
+                    return RedirectToAction("Index", "Productos");
+                }
             }
+
+            
             ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "Nombre", producto.Cat.Nombre);
             return View(producto);
         }
@@ -114,7 +128,7 @@ namespace WebComercio.Controllers
                     _context.Update(producto);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
                     if (!ProductoExists(producto.ProductoId))
                     {
@@ -122,13 +136,17 @@ namespace WebComercio.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["Mensaje"] = "Ha ocurrido un error al editar el producto.";
+                        TempData["TipoMensaje"] = 1;
+                        return RedirectToAction("Index", "Productos");
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                TempData["Mensaje"] = "El producto se actualizó correctamente.";
+                TempData["TipoMensaje"] = 2;
             }
+            
             ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "CatId", producto.CatId);
-            return View(producto);
+            return RedirectToAction("Index", "Productos");
         }
 
         // GET: Productoes/Delete/5
