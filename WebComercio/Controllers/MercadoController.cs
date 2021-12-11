@@ -324,10 +324,10 @@ namespace WebComercio.Controllers
 
         public IActionResult QuitarDelCarro(int? id, int identificador)
         {
-            Usuario usuario = _context.usuarios.Where(u => u.UsuarioId == identificador).FirstOrDefault();
+            Usuario usuario = _context.usuarios.Where(u => u.UsuarioId == identificador).Include(c => c.Carro).FirstOrDefault();
             Producto productoEncontrado = _context.productos.Where(p => p.ProductoId == id).FirstOrDefault();
             Carro carrito = usuario.Carro;
-            Carro_productos prodABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == identificador && carro.Id_Producto == id).FirstOrDefault();
+            Carro_productos prodABorrar = _context.Carro_productos.Where(carro => carro.Carro.UsuarioId == identificador && carro.Id_Producto == id).FirstOrDefault();
             _context.Carro_productos.Remove(prodABorrar);
             _context.SaveChanges();
 
