@@ -48,7 +48,7 @@ namespace WebComercio.Controllers
         // GET: Productoes/Create
         public IActionResult Create()
         {
-            ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "CatId");
+            ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "Nombre");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace WebComercio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "CatId", producto.CatId);
+            ViewData["CatId"] = new SelectList(_context.categorias, "CatId", "Nombre", producto.Cat.Nombre);
             return View(producto);
         }
 
