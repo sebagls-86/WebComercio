@@ -336,7 +336,8 @@ namespace WebComercio.Controllers
 
         public void Vaciar(int Id_Usuario)
         {
-            var carroABorrar = _context.Carro_productos.Where(carro => carro.Id_Carro == Id_Usuario);
+            var carroABorrar = _context.Carro_productos.Where(carro => carro.
+            == Id_Usuario);
             _context.Carro_productos.RemoveRange(carroABorrar);
             _context.SaveChanges();
         }
