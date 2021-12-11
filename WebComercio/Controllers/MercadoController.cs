@@ -336,8 +336,7 @@ namespace WebComercio.Controllers
 
         public void Vaciar(int Id_Usuario)
         {
-            var carroABorrar = _context.Carro_productos.Where(carro => carro.
-            == Id_Usuario);
+            var carroABorrar = _context.Carro_productos.Where(carro => carro.Carro.UsuarioId == Id_Usuario);
             _context.Carro_productos.RemoveRange(carroABorrar);
             _context.SaveChanges();
         }
@@ -461,7 +460,7 @@ namespace WebComercio.Controllers
                 return NotFound();
             }
 
-            var producto = _context.Carro_productos.Include(p => p.Producto).Where(cp => cp.Id_Carro == identificador && cp.Id_Producto ==id).FirstOrDefault();
+            var producto = _context.Carro_productos.Include(p => p.Producto).Where(cp => cp.Carro.UsuarioId == identificador && cp.Id_Producto ==id).FirstOrDefault();
             if (producto == null)
             {
                 return NotFound();
