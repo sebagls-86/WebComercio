@@ -29,7 +29,7 @@ namespace WebComercio.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index(string searchString)
+        public IActionResult Index(string searchString)
         {
             var usuarios = from u in _context.usuarios.Include(u => u.Carro)
                            select u;
@@ -41,7 +41,7 @@ namespace WebComercio.Controllers
                 usuarios = usuarios.Where(u => u.Nombre.Contains(searchString));
             }
 
-            return View(await usuarios.ToListAsync());
+            return View(usuarios.ToList());
         }
 
         // GET: Usuarios/Details/5
@@ -92,7 +92,7 @@ namespace WebComercio.Controllers
                         else
                         {
                             Carro carro = new Carro();
-
+                            usuario.Carro = carro;
                             usuario.Password = RegistrarController.Encrypt.GetSHA256(usuario.Password);
                             _context.Add(usuario);
                             _context.Add(carro);
@@ -100,8 +100,6 @@ namespace WebComercio.Controllers
 
                             Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
                             usuario.MiCarro = lastCarro.CarroId;
-                            Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
-                            carro.UsuarioId = lasUsuario.UsuarioId;
                             _context.usuarios.Update(usuario);
                             _context.carro.Update(carro);
                             _context.SaveChanges();
