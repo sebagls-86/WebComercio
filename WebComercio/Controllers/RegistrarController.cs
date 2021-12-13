@@ -53,17 +53,14 @@ namespace WebComercio.Controllers
                     {
 
                         Carro carro = new Carro();
-
-                        usuario.Password = Encrypt.GetSHA256(usuario.Password);
-
+                        usuario.Carro = carro;
+                        usuario.Password = RegistrarController.Encrypt.GetSHA256(usuario.Password);
                         _context.Add(usuario);
                         _context.Add(carro);
                         _context.SaveChanges();
 
                         Carro lastCarro = _context.carro.OrderBy(c => c.CarroId).Last();
                         usuario.MiCarro = lastCarro.CarroId;
-                        Usuario lasUsuario = _context.usuarios.OrderBy(u => u.UsuarioId).Last();
-                        carro.UsuarioId = lasUsuario.UsuarioId;
                         _context.usuarios.Update(usuario);
                         _context.carro.Update(carro);
                         _context.SaveChanges();

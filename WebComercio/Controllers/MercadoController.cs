@@ -409,7 +409,7 @@ namespace WebComercio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditData(int identificador, string mensaje, int id, string nueva1, string nueva2, int Cuil, string Nombre, string Apellido, string Mail, string Password, int MiCarro, int TipoUsuario)
+        public IActionResult EditData(int identificador, string mensaje, int id, string nueva1, string nueva2, long Cuil, string Nombre, string Apellido, string Mail, string Password, int MiCarro, int TipoUsuario)
         {
             ViewBag.Identificador = identificador;
             ViewBag.Mensaje = mensaje;
